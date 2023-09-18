@@ -2,12 +2,12 @@
   <mat-drawer #drawer mode="side">
     <div class="drawer-header">
       <h1>Historie</h1>
-      <button mat-mini-fab color="primary" (click)="drawer.toggle()" *ngIf="drawer.opened">
+      <button mat-icon-button color="primary" (click)="drawer.toggle()" *ngIf="drawer.opened">
         <mat-icon>menu</mat-icon>
       </button>
     </div>
   </mat-drawer>
-  <button mat-mini-fab color="primary" (click)="drawer.toggle()" class="drawer-toggle-button" *ngIf="!drawer.opened">
+  <button mat-icon-button color="primary" (click)="drawer.toggle()" class="drawer-toggle-button" *ngIf="!drawer.opened">
     <mat-icon>menu</mat-icon>
   </button>
   <div class="sidenav-content">
