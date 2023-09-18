@@ -1,0 +1,21 @@
+<mat-drawer-container autosize class="drawer-container">
+  <mat-drawer #drawer mode="side">
+    <div class="drawer-header">
+      <h1>Historie</h1>
+      <button mat-mini-fab color="primary" (click)="drawer.toggle()" *ngIf="drawer.opened">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+  </mat-drawer>
+  <button mat-mini-fab color="primary" (click)="drawer.toggle()" class="drawer-toggle-button" *ngIf="!drawer.opened">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <div class="sidenav-content">
+    <div>
+      <app-input></app-input>
+    </div>
+    <div>
+      <app-chart></app-chart>
+    </div>
+  </div>
+</mat-drawer-container>
