@@ -1,0 +1,28 @@
+.drawer-container {
+  height: 100vh;
+}
+
+.drawer-toggle-button {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.sidenav-content {
+  margin: auto;
+  padding: 20px;
+  width: 90%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 20px;
+}
+
+mat-drawer {
+  padding: 10px;
+  width: 15vw;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+}
