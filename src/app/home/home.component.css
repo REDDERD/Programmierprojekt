@@ -12,9 +12,29 @@
   margin: auto;
   padding: 20px;
   width: 90%;
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-gap: 40px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sidenav-item-left {
+  flex:0 0 50%;
+  margin-right: 50px;
+}
+
+.sidenav-item-right {
+  flex: 1;
+}
+
+@media (max-width: 60rem) {
+  .sidenav-content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column
+  }
+  .sidenav-item-left {
+    transform: translateX(50px);
+    margin-bottom: 30px;
+  }
 }
 
 mat-drawer {
