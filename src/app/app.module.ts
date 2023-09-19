@@ -10,23 +10,35 @@ import { HomeComponent } from './home/home.component';
 import { InputComponent } from './home/input/input.component';
 import { ChartContainerComponent } from './home/chart-container/chart-container.component';
 import { ChartComponent } from './home/chart-container/chart/chart.component';
+import { LoginComponent } from './login/login.component';
+import { AppRoutingModule } from './app-routing.module';
+import { RouterModule, Routes } from '@angular/router'
 
+const routes: Routes = [ { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },]
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     InputComponent,
     ChartContainerComponent,
-    ChartComponent
+    ChartComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatSidenavModule,
-    MatIconModule
+    MatIconModule,
+    AppRoutingModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+
+}
