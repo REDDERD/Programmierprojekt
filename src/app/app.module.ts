@@ -13,6 +13,7 @@ import { ChartComponent } from './home/chart-container/chart/chart.component';
 import { LoginComponent } from './login/login.component';
 import { RouterModule, Routes } from '@angular/router'
 import {MatInputModule} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
 
 const routes: Routes = [ { path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -33,7 +34,8 @@ const routes: Routes = [ { path: 'home', component: HomeComponent },
     MatSidenavModule,
     MatIconModule,
     RouterModule.forRoot(routes),
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
