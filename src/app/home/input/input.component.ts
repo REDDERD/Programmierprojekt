@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-input',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./input.component.css']
 })
 export class InputComponent {
+  clusterInputFormGroup = new FormGroup({
+    clusterName: new FormControl(''),
+    k: new FormControl(''),
+  });
+
+  submit() {
+    console.log(JSON.stringify(this.clusterInputFormGroup.value));
+  }
 
 }
