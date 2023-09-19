@@ -1,0 +1,17 @@
+.center-contents {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.grid-over-two-columns {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
