@@ -1,4 +1,5 @@
 <mat-drawer-container autosize class="drawer-container">
+  <!-- Drawer Content -->
   <mat-drawer #drawer mode="side">
     <div class="drawer-header">
       <h1>Historie</h1>
@@ -6,7 +7,16 @@
         <mat-icon>menu</mat-icon>
       </button>
     </div>
+
+    <div class="drawer-footer">
+      <button mat-icon-button color="primary" (click)="this.routeToLogin()" *ngIf="drawer.opened">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
   </mat-drawer>
+
+
+  <!-- Main Site -->
   <button mat-icon-button color="primary" (click)="drawer.toggle()" class="drawer-toggle-button" *ngIf="!drawer.opened">
     <mat-icon>menu</mat-icon>
   </button>

@@ -46,3 +46,9 @@ mat-drawer {
   display: flex;
   justify-content: space-between;
 }
+
+.drawer-footer{
+  display: flex;
+  position:absolute;
+  bottom:0;
+}

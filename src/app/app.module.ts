@@ -10,9 +10,14 @@ import { HomeComponent } from './home/home.component';
 import { InputComponent } from './home/input/input.component';
 import { ChartContainerComponent } from './home/chart-container/chart-container.component';
 import { ChartComponent } from './home/chart-container/chart/chart.component';
+import { LoginComponent } from './login/login.component';
+import { RouterModule, Routes } from '@angular/router'
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 
+const routes: Routes = [ { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },]
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +25,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     InputComponent,
     ChartContainerComponent,
     ChartComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -27,10 +33,12 @@ import {ReactiveFormsModule} from "@angular/forms";
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
+    RouterModule.forRoot(routes),
     MatInputModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
