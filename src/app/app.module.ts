@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { InputComponent } from './home/input/input.component';
 import { ChartContainerComponent } from './home/chart-container/chart-container.component';
 import { ChartComponent } from './home/chart-container/chart/chart.component';
+import {MatInputModule} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -17,14 +19,16 @@ import { ChartComponent } from './home/chart-container/chart/chart.component';
     HomeComponent,
     InputComponent,
     ChartContainerComponent,
-    ChartComponent
+    ChartComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatSidenavModule,
-    MatIconModule
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

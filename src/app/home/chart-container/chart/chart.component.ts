@@ -42,7 +42,6 @@ export class ChartComponent implements AfterViewInit{
             var a: HTMLAnchorElement = <HTMLAnchorElement>document.getElementById('chartDownload');
             a.href = this.toBase64Image();
             a.download = 'chart.png';
-            // a.click();
           },
         }
       }
