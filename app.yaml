@@ -3,7 +3,7 @@ api_version: 1
 threadsafe: yes
 
 handlers:
-  - url: /
+  - url: /.*
     static_files: dist/programmierprojekt/index.html
     upload: dist/programmierprojekt/index.html
   - url: /
