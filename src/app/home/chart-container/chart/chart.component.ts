@@ -1,5 +1,5 @@
 import {AfterViewInit, Component} from '@angular/core';
-import {Chart, plugins} from "chart.js/auto";
+import {Chart} from "chart.js/auto";
 import {Points, ResponseInterface} from "../../../interfaces/response-interface";
 import {CentroidDatesetInterface, ChartDatasetInterface} from "../../../interfaces/chartDataset-interface";
 import {MockDaten} from "./mock-daten";
