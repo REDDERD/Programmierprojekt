@@ -9,14 +9,14 @@
     <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
       <input type="file" style="display: none" (change)="onChange($event)" #fileUpload >
 
-      <h3>Drag and Drop a file here</h3>
-      <h3>or</h3>
+      <h3>Ziehen Sie eine Datei per Drag & Drop hierher</h3>
+      <h3>oder</h3>
+
       <div class="button-row">
         <button mat-raised-button (click)="fileUpload.click()" color="accent">
-          Upload a file <mat-icon>upload_file</mat-icon>
+          Lade eine Datei hoch <mat-icon>upload_file</mat-icon>
         </button>
       </div>
-
 
     </div>
 
