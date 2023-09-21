@@ -5,7 +5,21 @@
       <mat-label>Name des Clusters</mat-label>
       <input matInput placeholder="Clustering XY" formControlName="clusterName">
     </mat-form-field>
-    <div class="grid-over-two-columns" style="margin-bottom: 20px">Hier soll ein Datenupload hin</div>
+
+    <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
+      <input type="file" style="display: none" (change)="onChange($event)" #fileUpload>
+
+      <h3>Drag and Drop a file here</h3>
+      <h3>or</h3>
+      <div class="button-row">
+        <button mat-raised-button (click)="fileUpload.click()" color="accent">
+          Upload a file <mat-icon>upload_file</mat-icon>
+        </button>
+      </div>
+
+
+    </div>
+
     <mat-form-field floatLabel="always">
       <mat-label>k definieren</mat-label>
       <input matInput type="number" formControlName="k" min="0">

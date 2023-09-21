@@ -16,4 +16,29 @@ export class InputComponent {
     console.log(JSON.stringify(this.clusterInputFormGroup.value));
   }
 
+  onDragOver(event: any){
+    event.preventDefault();
+  }
+
+  onDropSuccess(event: any) {
+    event.preventDefault();
+
+    this.onFileChange(event.dataTransfer.files);    // notice the "dataTransfer" used instead of "target"
+  }
+
+  onChange(event:any){
+    this.onFileChange(event.target.files);
+  }
+
+  private onFileChange(files: File[]){
+    console.log(files);
+  }
+
+/*
+  protected readonly eval = eval;
+  protected readonly event = event;
+  protected readonly event = event;
+  protected readonly console = console;
+
+ */
 }
