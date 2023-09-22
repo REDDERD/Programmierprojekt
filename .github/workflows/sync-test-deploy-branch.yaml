@@ -11,7 +11,7 @@ on:
   uses: lucasruy/sync-branch-action@v1.2.0
   with:
     # User token to be associated with this pull request.
-    GITHUB_TOKEN: 
+    # GITHUB_TOKEN: 
     # Branch where you implemented your new code.
     SOURCE_BRANCH: main
     # Branch you want to send your new code.
