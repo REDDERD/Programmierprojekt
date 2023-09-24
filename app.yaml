@@ -3,11 +3,12 @@ api_version: 1
 threadsafe: yes
 
 handlers:
-  - url: /
+  - url: /.*
     secure: always
     static_files: dist/programmierprojekt/index.html
     upload: dist/programmierprojekt/index.html
-  - url: /
+  - url: /.*
+    secure: always
     static_dir: dist/programmierprojekt
 
 skip_files:
