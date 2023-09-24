@@ -1,20 +1,26 @@
-name: Synchronize Branches
-
+name: Sync test-deploy with main
 on:
   push:
     branches:
       - main
 
 jobs:
-  sync:
+  sync-branches:
     runs-on: ubuntu-latest
+    name: Syncing branches
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
         with:
-          ref: main
-          fetch-depth: 0  # Fetch all history for all branches and tags.
-
-      - name: Push to test-deployment branch
-        run: |
-          git push origin HEAD:refs/heads/test-deployment
+          node-version: 12
+      - name: Opening pull request
+        id: pull
+        uses: tretuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN: ${{secrets.SECRET_SYNC}}
+          FROM_BRANCH: "main"
+          TO_BRANCH: "test-deployment"
+          PULL_REQUEST_TITLE: "Sync test-deployment with main"
+          PULL_REQUEST_BODY: "For keeping test-deployment up to date with the recent changes made to main."
