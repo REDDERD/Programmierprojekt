@@ -4,6 +4,7 @@ threadsafe: yes
 
 handlers:
   - url: /
+    secure: always
     static_files: dist/programmierprojekt/index.html
     upload: dist/programmierprojekt/index.html
   - url: /
