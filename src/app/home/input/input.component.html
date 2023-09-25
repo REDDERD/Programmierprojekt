@@ -9,7 +9,7 @@
     <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
       <input type="file" style="display: none" (change)="onChange($event)" #fileUpload >
 
-      <h3>Ziehen Sie eine Datei per Drag & Drop hierher</h3>
+      <h3>Ziehe eine .csv / .xslx Datei per Drag & Drop hierher</h3>
       <h3>oder</h3>
 
       <div class="button-row">
@@ -18,6 +18,11 @@
         </button>
       </div>
 
+    </div>
+
+    <div class="grid-over-two-columns file-display" *ngIf="file">
+      <mat-icon style="margin-right: 20px">insert_drive_file</mat-icon>
+      <div style="vertical-align: center">{{file.name}}</div>
     </div>
 
     <mat-form-field floatLabel="always">
