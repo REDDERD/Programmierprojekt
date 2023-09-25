@@ -26,6 +26,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  border-radius: 5px;
 
   margin-bottom: 20px;
 
@@ -33,8 +34,19 @@
     horiz-align: center;
   }
 }
-
 .dropzone:hover{
   background-color: rgba(255, 64, 129, 0.05);
 
+}
+
+.file-display{
+  height: 20px;
+  padding: 1rem;
+  border: dashed 1px gray;
+  position: relative;
+  display: flex;
+  vertical-align: center;
+  border-radius: 5px;
+
+  margin-bottom: 20px;
 }
