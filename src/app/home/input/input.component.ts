@@ -15,7 +15,6 @@ export class InputComponent {
     k: new FormControl(''),
   });
   @Output() apiResponse: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
-  // apiResponse: ResponseInterface | undefined;
 
   constructor(
       private snackbar: MatSnackBar,
@@ -48,7 +47,7 @@ export class InputComponent {
       this.file = file;
       this.snackbar.open('Ich lade die Datei '+file.name+' hoch wenn die API Jungs soweit sind','Okay');
 
-      this.apiService.postKmeans(this.file, 2).subscribe((response: ResponseInterface) => {
+      this.apiService.postKmeans(this.file, 1, 2).subscribe((response: ResponseInterface) => {
         // console.log(response);
         this.apiResponse.emit(response);
       })

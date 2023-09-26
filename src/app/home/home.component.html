@@ -25,7 +25,7 @@
       <app-input (apiResponse)="handleAPIResponse($event)"></app-input>
     </div>
     <div class="sidenav-item-right">
-      <app-chart></app-chart>
+      <app-chart-container [apiResponse]="apiResponse"></app-chart-container>
     </div>
   </div>
 </mat-drawer-container>
