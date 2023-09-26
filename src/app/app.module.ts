@@ -19,6 +19,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatPseudoCheckboxModule} from "@angular/material/core";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 const routes: Routes = [ { path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -45,7 +46,8 @@ const routes: Routes = [ { path: 'home', component: HomeComponent },
         MatSnackBarModule,
         MatPseudoCheckboxModule,
         MatButtonToggleModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatExpansionModule
     ],
   providers: [],
   bootstrap: [AppComponent]
