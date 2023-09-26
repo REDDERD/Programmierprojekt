@@ -22,7 +22,7 @@
   </button>
   <div class="sidenav-content">
     <div class="sidenav-item-left">
-      <app-input></app-input>
+      <app-input (apiResponse)="handleAPIResponse($event)"></app-input>
     </div>
     <div class="sidenav-item-right">
       <app-chart></app-chart>

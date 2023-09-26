@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ApiService} from "../home-services/api.service";
+import {ResponseInterface} from "../../interfaces/response-interface";
 
 @Component({
   selector: 'app-input',
@@ -13,8 +15,13 @@ export class InputComponent {
     clusterName: new FormControl(''),
     k: new FormControl(''),
   });
+  @Output() apiResponse: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
+  // apiResponse: ResponseInterface | undefined;
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar) { //http wird später für die API Anbindung benutzt
+  constructor(
+      private snackbar: MatSnackBar,
+      private apiService: ApiService,
+      ) { //http wird später für die API Anbindung benutzt
   }
 
   public file?: File;
@@ -34,15 +41,18 @@ export class InputComponent {
   }
 
   onChange(event:any){
-
     this.onFileChange(event.target.files[0]);
   }
 
   private onFileChange(file: File){
-
     if(file.type == 'text/csv' || file.type =='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
       this.file = file;
       this.snackbar.open('Ich lade die Datei '+file.name+' hoch wenn die API Jungs soweit sind','Okay');
+
+      this.apiService.postKmeans(this.file, 2).subscribe((response: ResponseInterface) => {
+        // console.log(response);
+        this.apiResponse.emit(response);
+      })
     }
     else {
       this.snackbar.open('Falsches Dateiformat','Okay');
