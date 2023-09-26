@@ -15,6 +15,7 @@ export class InputComponent {
     k: new FormControl(''),
   });
   @Output() apiResponse: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
+  @Output() isLoading: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   constructor(
       private snackbar: MatSnackBar,
@@ -45,11 +46,17 @@ export class InputComponent {
   private onFileChange(file: File){
     if(file.type == 'text/csv' || file.type =='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
       this.file = file;
-      this.snackbar.open('Ich lade die Datei '+file.name+' hoch wenn die API Jungs soweit sind','Okay');
+      this.snackbar.open('Datei '+file.name+' wird hochgeladen','Okay');
 
+      this.isLoading.emit(true);
       this.apiService.postKmeans(this.file, -1, -1).subscribe((response: ResponseInterface) => {
         // console.log(response);
         this.apiResponse.emit(response);
+        this.isLoading.emit(false);
+      }, error => {
+        this.isLoading.emit(false);
+        this.snackbar.open('Ein Fehler ist aufgetreten','Okay');
+        console.log(error);
       })
     }
     else {

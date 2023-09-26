@@ -36,9 +36,7 @@ export class ApiService {
 
     const formData = new FormData()
     formData.append( 'file', new Blob([csv], { type: 'text/csv' }), csv.name);
-
-    console.log(Params);
-
+    
     return this.http.post(
         'https://beta.axellotl.de/clustering/perform-kmeans-clustering/',
         formData,

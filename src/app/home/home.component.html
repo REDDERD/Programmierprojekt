@@ -17,12 +17,14 @@
 
 
   <!-- Main Site -->
+  <mat-spinner class="loading-spinner" *ngIf="isLoading"></mat-spinner>
+  <div class="grey-background" *ngIf="isLoading"></div>
   <button mat-icon-button color="primary" (click)="drawer.toggle()" class="drawer-toggle-button" *ngIf="!drawer.opened">
     <mat-icon>menu</mat-icon>
   </button>
   <div class="sidenav-content">
     <div class="sidenav-item-left">
-      <app-input (apiResponse)="handleAPIResponse($event)"></app-input>
+      <app-input (apiResponse)="handleAPIResponse($event)" (isLoading)="handleLoading($event)"></app-input>
     </div>
     <div class="sidenav-item-right">
       <app-chart-container [apiResponse]="apiResponse"></app-chart-container>

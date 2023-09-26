@@ -52,3 +52,19 @@ mat-drawer {
   position:absolute;
   bottom:0;
 }
+
+.loading-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 200px;
+  z-index: 10;
+}
+
+.grey-background {
+  background-color: rgba(106, 106, 106, 0.5);
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9;
+}
