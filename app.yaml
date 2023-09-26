@@ -13,11 +13,13 @@ env_variables:
 
 handlers:
   - url: /(.*\.(js|css|map|json|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico))
+    secure: always
     static_files: dist/programmierprojekt/\1
     upload: dist/programmierprojekt/.*\.(js|css|map|json|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)$
 
   # Alle anderen URLs werden an die Angular-App weitergeleitet
   - url: /.*
+    secure: always
     static_files: dist/programmierprojekt/index.html
     upload: dist/programmierprojekt/index.html
     http_headers:
