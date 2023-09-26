@@ -16,26 +16,28 @@ export class ApiService {
       clusterDetermination?: string,
   ): Observable<any> {
 
-    const Params: HttpParams = new HttpParams()
+    let Params: HttpParams = new HttpParams()
 
-    if (column1) {
-      Params.set('column1', column1);
+    if (column1 && column1 != -1) {
+      Params = Params.set('column1', column1);
     }
-    if (column2) {
-      Params.set('column2', column2);
+    if (column2 && column2 != -1) {
+      Params = Params.set('column2', column2);
     }
     if (kCluster) {
-      Params.set('kCluster', kCluster);
+      Params = Params.set('kCluster', kCluster);
     }
     if (distanceMetric) {
-      Params.set('distanceMetric', distanceMetric);
+      Params = Params.set('distanceMetric', distanceMetric);
     }
     if (clusterDetermination) {
-      Params.set('clusterDetermination', clusterDetermination);
+      Params = Params.set('clusterDetermination', clusterDetermination);
     }
 
     const formData = new FormData()
     formData.append( 'file', new Blob([csv], { type: 'text/csv' }), csv.name);
+
+    console.log(Params);
 
     return this.http.post(
         'https://beta.axellotl.de/clustering/perform-kmeans-clustering/',

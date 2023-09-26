@@ -75,20 +75,20 @@ export class ChartComponent implements AfterViewInit, OnChanges{
         plugins: {
           title: {
             display: true,
-            text: MockDaten.name
+            text: this.chartData.name
           },
         },
         scales: {
           y: {
             title: {
               display: true,
-              text: MockDaten.y_label
+              text: this.chartData.y_label
             }
           },
           x: {
             title: {
               display: true,
-              text: MockDaten.x_label
+              text: this.chartData.x_label
             }
           }
         }
