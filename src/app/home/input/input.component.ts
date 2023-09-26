@@ -46,7 +46,7 @@ export class InputComponent {
   private onFileChange(file: File){
     if(file.type == 'text/csv' || file.type =='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
       this.file = file;
-      this.snackbar.open('Datei '+file.name+' wird hochgeladen','Okay');
+      this.snackbar.open('Datei '+file.name+' wird hochgeladen','Okay', {duration: 2000});
 
       this.isLoading.emit(true);
       this.apiService.postKmeans(this.file, -1, -1).subscribe((response: ResponseInterface) => {
@@ -60,7 +60,7 @@ export class InputComponent {
       })
     }
     else {
-      this.snackbar.open('Falsches Dateiformat','Okay');
+      this.snackbar.open('Falsches Dateiformat','Okay', {duration: 3000});
     }
 
   }
