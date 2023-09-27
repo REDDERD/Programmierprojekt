@@ -3,7 +3,7 @@
     <h1 class="grid-over-two-columns">Clustering</h1>
     <mat-form-field class="grid-over-two-columns">
       <mat-label>Name des Clusters</mat-label>
-      <input matInput placeholder="Clustering XY" formControlName="clusterName">
+      <input matInput placeholder="Vorgang XY" formControlName="clusterName">
     </mat-form-field>
 
     <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
@@ -13,7 +13,7 @@
       <h3>oder</h3>
 
       <div class="button-row">
-        <button mat-raised-button (click)="fileUpload.click()" color="accent">
+        <button mat-raised-button (click)="fileUpload.click()" color="accent" type="button">
           Lade eine Datei hoch <mat-icon>upload_file</mat-icon>
         </button>
       </div>
@@ -29,6 +29,21 @@
       <mat-label>k definieren</mat-label>
       <input matInput type="number" formControlName="k" min="0">
       <span matTextPrefix>k= </span>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Distance Metric</mat-label>
+      <mat-select formControlName="distanceMetric">
+        <mat-option value='EUCLIDEAN'>Euclidean</mat-option>
+        <mat-option value='MANHATTAN'>Manhattan</mat-option>
+        <mat-option value='JACCARDS'>Jaccards</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Cluster Determination</mat-label>
+      <mat-select formControlName="clusterDetermination">
+        <mat-option value="ELBOW">Elbow</mat-option>
+        <mat-option value="SILHOUETTE">Silhouette</mat-option>
+      </mat-select>
     </mat-form-field>
     <div></div>
     <button mat-raised-button>Clustering Starten</button>

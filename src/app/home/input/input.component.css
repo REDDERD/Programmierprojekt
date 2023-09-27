@@ -6,9 +6,10 @@
 }
 
 .form-container {
-  width: 100%;
+  width: 98%;
   display: grid;
   grid-template-columns: 50% 50%;
+  grid-gap: 20px;
 }
 
 .grid-over-two-columns {

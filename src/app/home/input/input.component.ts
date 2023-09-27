@@ -13,6 +13,8 @@ export class InputComponent {
   clusterInputFormGroup = new FormGroup({
     clusterName: new FormControl(''),
     k: new FormControl(''),
+    distanceMetric: new FormControl('EUCLIDEAN'),
+    clusterDetermination: new FormControl('ELBOW'),
   });
   @Output() apiResponse: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter<boolean>()
@@ -20,13 +22,34 @@ export class InputComponent {
   constructor(
       private snackbar: MatSnackBar,
       private apiService: ApiService,
-      ) { //http wird später für die API Anbindung benutzt
+      ) {
   }
 
   public file?: File;
 
   submit() {
-    console.log(JSON.stringify(this.clusterInputFormGroup.value));
+    console.log(this.clusterInputFormGroup.value.clusterDetermination);
+
+    if(this.file && this.clusterInputFormGroup.value.distanceMetric && this.clusterInputFormGroup.value.clusterDetermination) {
+      this.isLoading.emit(true);
+      this.apiService.postKmeans(
+          this.file,
+          undefined,
+          undefined,
+          Number(this.clusterInputFormGroup.value.k),
+          this.clusterInputFormGroup.value.distanceMetric,
+          this.clusterInputFormGroup.value.clusterDetermination
+      ).subscribe((response: ResponseInterface) => {
+        this.apiResponse.emit(response);
+        this.isLoading.emit(false);
+      }, error => {
+        this.isLoading.emit(false);
+        this.snackbar.open('Ein Fehler ist aufgetreten. Meldung: ' + error.error.detail,'Okay');
+        console.log(error);
+      })
+    } else {
+      this.snackbar.open('Bitte lade erst eine Datei hoch','Okay', {duration: 3000});
+    }
   }
 
   onDragOver(event: any){
@@ -48,16 +71,7 @@ export class InputComponent {
       this.file = file;
       this.snackbar.open('Datei '+file.name+' wird hochgeladen','Okay', {duration: 2000});
 
-      this.isLoading.emit(true);
-      this.apiService.postKmeans(this.file, -1, -1).subscribe((response: ResponseInterface) => {
-        // console.log(response);
-        this.apiResponse.emit(response);
-        this.isLoading.emit(false);
-      }, error => {
-        this.isLoading.emit(false);
-        this.snackbar.open('Ein Fehler ist aufgetreten','Okay');
-        console.log(error);
-      })
+
     }
     else {
       this.snackbar.open('Falsches Dateiformat','Okay', {duration: 3000});
