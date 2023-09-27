@@ -1,0 +1,25 @@
+name: Linting
+
+on:
+  push:
+    branches:
+      - '**'  # Dies bedeutet, dass die Aktion für jeden Branch ausgelöst wird
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run ng lint
+        run: npx ng lint
