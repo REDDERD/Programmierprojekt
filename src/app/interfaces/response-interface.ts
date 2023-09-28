@@ -1,12 +1,15 @@
 export interface ResponseInterface {
+  "user_id": number,
+  "request_id": number,
   "name": string,
   "cluster": Array<Cluster>,
   "x_label": string,
   "y_label": string,
   "iterations": number,
-  "distance_metric": string,
-  "silhouette_score": number,
-  "davies_bouldin_index": number,
+  "used_distance_metric": string,
+  "used_optK_method": string,
+  "clusters_elbow": number,
+  "clusters_silhouette": number,
 }
 
 interface Cluster {

@@ -6,9 +6,10 @@
 }
 
 .form-container {
-  width: 100%;
+  width: 98%;
   display: grid;
   grid-template-columns: 50% 50%;
+  grid-gap: 20px;
 }
 
 .grid-over-two-columns {
@@ -49,4 +50,12 @@
   border-radius: 5px;
 
   margin-bottom: 20px;
+}
+
+.settings-grid {
+  width: 100%;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 35% 65%;
+  grid-gap: 20px;
 }

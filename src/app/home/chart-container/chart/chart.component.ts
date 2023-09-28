@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Chart} from "chart.js/auto";
 import {Points, ResponseInterface} from "../../../interfaces/response-interface";
 import {CentroidDatesetInterface, ChartDatasetInterface} from "../../../interfaces/chartDataset-interface";
@@ -9,19 +9,31 @@ import {MockDaten} from "./mock-daten";
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements AfterViewInit{
+export class ChartComponent implements AfterViewInit, OnChanges{
   public chart: any;
-  MockData: ResponseInterface = MockDaten
+  chartData: ResponseInterface = MockDaten
   datasets: Array<ChartDatasetInterface> = [];
+  @Input() apiResponse: ResponseInterface | undefined;
 
   ngAfterViewInit() {
     this.renderChart();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['apiResponse'].currentValue != undefined){
+      if(this.apiResponse){
+        this.datasets = [];
+        this.chartData = this.apiResponse;
+      }
+      this.chart.destroy()
+      this.renderChart()
+    }
+  }
+
   generateDatasets() {
     let centroids: Array<Points> = [];
     let clusterArray: Array<ChartDatasetInterface> = [];
-    this.MockData.cluster.map(cluster => {
+    this.chartData.cluster.map(cluster => {
       let dataset: ChartDatasetInterface = {
         label: "Cluster " + (cluster.clusterNr + 1),
         data: cluster.points
@@ -63,20 +75,20 @@ export class ChartComponent implements AfterViewInit{
         plugins: {
           title: {
             display: true,
-            text: MockDaten.name
+            text: this.chartData.name
           },
         },
         scales: {
           y: {
             title: {
               display: true,
-              text: MockDaten.y_label
+              text: this.chartData.y_label
             }
           },
           x: {
             title: {
               display: true,
-              text: MockDaten.x_label
+              text: this.chartData.x_label
             }
           }
         }
