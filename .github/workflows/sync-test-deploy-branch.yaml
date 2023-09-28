@@ -1,25 +1,28 @@
-name: Synchronize Branches
-
+name: Sync test-deploy with main
 on:
   push:
     branches:
       - main
 
-- name: Sync Branch Action
-  # You may pin to the exact commit or the version.
-  # uses: lucasruy/sync-branch-action@2208081dfed383bf8e9c13ce862061a3e7a58239
-  uses: lucasruy/sync-branch-action@v1.2.0
-  with:
-    # User token to be associated with this pull request.
-    # GITHUB_TOKEN: 
-    # Branch where you implemented your new code.
-    SOURCE_BRANCH: main
-    # Branch you want to send your new code.
-    DESTINATION_BRANCH: test-deployment
-    # Standard title for your update pull request. Default is: "update: {FROM_BRANCH} to {TO_BRANCH}"
-    PULL_REQUEST_TITLE: # optional
-    # Content with description for your automated pull. Default is: "This is an automatic PullRequest to keep {BASE_BRANCH} up to date with {FROM_BRANCH}!"
-    PULL_REQUEST_BODY: # optional
-    # Pull Request label. Default is: ""
-    PULL_REQUEST_LABEL: # optional
+
+jobs: 
+  sync-branches:
+    runs-on: ubuntu-latest
+    name: Syncing branches
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Opening pull request
+        id: pull
+        uses: tretuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN: ${{secrets.SECRET_SYNC}}
+          FROM_BRANCH: "main"
+          TO_BRANCH: "test-deployment"
+          PULL_REQUEST_TITLE: "Sync test-deployment with main"
+          PULL_REQUEST_BODY: "For keeping test-deployment up to date with the recent changes made to main."
 

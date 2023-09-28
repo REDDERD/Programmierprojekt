@@ -6,11 +6,11 @@ steps:
 
   # Build productive files
   - name: 'gcr.io/cloud-builders/npm'
-    args: [ 'run', 'build', '--prod' ]
+    args: [ 'run', 'build', '--output-path=dist/programmierprojekt', '--prod' ]
 
   # Build productive files
   - name: 'gcr.io/cloud-builders/npm'
-    args: [ 'run', 'build', '--prod' ]
+    args: [ 'run', 'build', '--output-path=dist/programmierprojekt', '--prod' ]
 
   # Deploy to google cloud app engine
   - name: 'gcr.io/cloud-builders/gcloud'

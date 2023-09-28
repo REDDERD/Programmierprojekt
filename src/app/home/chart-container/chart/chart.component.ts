@@ -1,5 +1,8 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {Chart} from "chart.js/auto";
+import {Points, ResponseInterface} from "../../../interfaces/response-interface";
+import {CentroidDatesetInterface, ChartDatasetInterface} from "../../../interfaces/chartDataset-interface";
+import {MockDaten} from "./mock-daten";
 
 @Component({
   selector: 'app-chart',
@@ -8,31 +11,44 @@ import {Chart} from "chart.js/auto";
 })
 export class ChartComponent implements AfterViewInit{
   public chart: any;
-  chartImage: string = '';
-  datensatz1: Array<{}> = [{ "x": 1.2, "y": 3.4 }, { "x": 3.1, "y": 4.7 }, { "x": 4.5, "y": 2.8 }, { "x": 2.3, "y": 1.6 }, { "x": 1.8, "y": 4.2 }, { "x": 4.7, "y": 3.2 }, { "x": 3.9, "y": 1.9 }, { "x": 2.6, "y": 4.5 }, { "x": 1.5, "y": 3.1 }, { "x": 2.8, "y": 2.1 }, { "x": 4.3, "y": 3.8 }, { "x": 1.4, "y": 4.9 }, { "x": 3.7, "y": 2.7 }, { "x": 1.9, "y": 1.5 }, { "x": 4.0, "y": 4.3 }, { "x": 2.2, "y": 1.7 }, { "x": 3.4, "y": 3.5 }, { "x": 2.0, "y": 4.8 }, { "x": 1.7, "y": 2.4 }, { "x": 4.6, "y": 1.3 }, { "x": 3.3, "y": 2.2 }, { "x": 2.5, "y": 3.9 }, { "x": 4.2, "y": 4.1 }, { "x": 1.1, "y": 1.2 }, { "x": 3.0, "y": 5.0 }, { "x": 2.4, "y": 3.3 }, { "x": 4.4, "y": 2.0 }, { "x": 1.3, "y": 4.6 }, { "x": 3.6, "y": 2.3 }, { "x": 2.9, "y": 1.4 }, { "x": 4.8, "y": 3.7 }, { "x": 1.6, "y": 2.6 },{ "x": 3.5, "y": 4.4 },];
-  datensatz2: Array<{}> = [  { "x": 1.7, "y": 2.8 },  { "x": 4.3, "y": 3.1 },  { "x": 2.5, "y": 1.4 },  { "x": 1.9, "y": 4.2 },  { "x": 3.6, "y": 2.3 },  { "x": 4.0, "y": 1.6 },  { "x": 2.1, "y": 3.9 },  { "x": 1.3, "y": 4.8 },  { "x": 4.7, "y": 2.0 },  { "x": 2.0, "y": 3.2 },  { "x": 3.9, "y": 4.7 },  { "x": 1.4, "y": 2.6 },  { "x": 2.8, "y": 1.1 },  { "x": 4.5, "y": 4.0 },  { "x": 3.0, "y": 2.7 },  { "x": 2.2, "y": 5.0 },  { "x": 1.1, "y": 3.4 },  { "x": 4.6, "y": 3.5 },  { "x": 3.7, "y": 1.3 },  { "x": 1.5, "y": 4.5 },  { "x": 4.2, "y": 1.9 },  { "x": 3.3, "y": 2.9 },  { "x": 2.4, "y": 4.3 },  { "x": 1.6, "y": 3.8 },  { "x": 4.4, "y": 2.4 },  { "x": 2.7, "y": 1.5 },  { "x": 3.4, "y": 4.6 },  { "x": 1.2, "y": 2.1 },  { "x": 4.1, "y": 3.0 },  { "x": 3.5, "y": 1.7 },  { "x": 2.3, "y": 5.0 }];
+  MockData: ResponseInterface = MockDaten
+  datasets: Array<ChartDatasetInterface> = [];
 
   ngAfterViewInit() {
     this.renderChart();
   }
 
+  generateDatasets() {
+    let centroids: Array<Points> = [];
+    let clusterArray: Array<ChartDatasetInterface> = [];
+    this.MockData.cluster.map(cluster => {
+      let dataset: ChartDatasetInterface = {
+        label: "Cluster " + (cluster.clusterNr + 1),
+        data: cluster.points
+      }
+      centroids.push(cluster.centroid)
+      clusterArray.push(dataset)
+    })
+    const centroidDataset: CentroidDatesetInterface = {
+      label: "Centroids",
+      data: centroids,
+      pointStyle: "rectRot",
+      radius: 10
+    }
+    this.datasets.push(centroidDataset)
+    clusterArray.map(cluster => {
+      this.datasets.push(cluster);
+    })
+  }
+
   renderChart(){
+    this.generateDatasets()
     var image: string;
     this.chart = new Chart("Chart", {
       type: 'scatter', //this denotes tha type of chart
 
       data: {
-        datasets: [
-          {
-            label: 'test1',
-            data: this.datensatz1
-          },
-          {
-            label: 'test2',
-            data: this.datensatz2
-          },
-
-        ]
+        datasets: this.datasets
       },
       options: {
         aspectRatio:1,
@@ -43,6 +59,26 @@ export class ChartComponent implements AfterViewInit{
             a.href = this.toBase64Image();
             a.download = 'chart.png';
           },
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: MockDaten.name
+          },
+        },
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: MockDaten.y_label
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: MockDaten.x_label
+            }
+          }
         }
       }
     });
