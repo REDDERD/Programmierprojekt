@@ -28,7 +28,7 @@ export class InputComponent {
   public file?: File;
 
   submit() {
-    console.log(this.clusterInputFormGroup.value.clusterDetermination);
+    console.log(this.clusterInputFormGroup.value);
 
     if(this.file && this.clusterInputFormGroup.value.distanceMetric && this.clusterInputFormGroup.value.clusterDetermination) {
       this.isLoading.emit(true);

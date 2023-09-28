@@ -25,27 +25,52 @@
       <div style="vertical-align: center">{{file.name}}</div>
     </div>
 
-    <mat-form-field floatLabel="always">
-      <mat-label>k definieren</mat-label>
-      <input matInput type="number" formControlName="k" min="0">
-      <span matTextPrefix>k= </span>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Distance Metric</mat-label>
-      <mat-select formControlName="distanceMetric">
-        <mat-option value='EUCLIDEAN'>Euclidean</mat-option>
-        <mat-option value='MANHATTAN'>Manhattan</mat-option>
-        <mat-option value='JACCARDS'>Jaccards</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Cluster Determination</mat-label>
-      <mat-select formControlName="clusterDetermination">
-        <mat-option value="ELBOW">Elbow</mat-option>
-        <mat-option value="SILHOUETTE">Silhouette</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div></div>
-    <button mat-raised-button>Clustering Starten</button>
+    <div class="grid-over-two-columns" style="margin-bottom: 22px;">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Experteneinstellungen</mat-panel-title>
+          </mat-expansion-panel-header>
+
+
+          <div class="settings-grid">
+            <div>Anzahl der Cluster (optional)</div>
+            <div>
+              <mat-form-field floatLabel="always">
+                <mat-label>k definieren (optional)</mat-label>
+                <input matInput type="number" formControlName="k" min="0">
+                <span matTextPrefix>k= </span>
+              </mat-form-field>
+            </div>
+            <div>
+              <p>Berechnungsmethode</p>
+            </div>
+            <div>
+              <mat-button-toggle-group name="distanceMethod" style="margin-top: -16px" formControlName="distanceMetric">
+                <mat-button-toggle value="EUCLIDEAN">Euklidisch (Standard)</mat-button-toggle>
+                <mat-button-toggle value="MANHATTAN">Manhattan</mat-button-toggle>
+                <mat-button-toggle value="JACCARDS">Jaccard</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div>
+              <p>Methode zur Bestimmung von K</p>
+            </div>
+            <div>
+              <mat-button-toggle-group [attr.disabled]="true" name="kMethod" formControlName="clusterDetermination">
+                <mat-button-toggle value="ELBOW">Ellenbogen (Standard)</mat-button-toggle>
+                <mat-button-toggle value="SILHOUETTE">Silhouette</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div class="grid-over-two-columns">
+              <mat-slide-toggle name="localSelector" aria-label="execute locally">Lokal im Browser ausführen
+              </mat-slide-toggle>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+
+    <button mat-raised-button class="grid-over-two-columns" color="primary" disabled="{{ !file }}">Clustering starten</button>
   </form>
 </div>

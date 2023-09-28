@@ -18,6 +18,9 @@ import {HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatSelectModule} from "@angular/material/select";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 const routes: Routes = [ { path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -31,20 +34,23 @@ const routes: Routes = [ { path: 'home', component: HomeComponent },
     ChartComponent,
     LoginComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatIconModule,
-        RouterModule.forRoot(routes),
-        MatInputModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        MatSnackBarModule,
-        MatProgressSpinnerModule,
-        MatSelectModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    RouterModule.forRoot(routes),
+    MatInputModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatButtonToggleModule,
+    MatExpansionModule,
+    MatSlideToggleModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

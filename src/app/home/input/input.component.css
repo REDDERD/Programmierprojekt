@@ -51,3 +51,11 @@
 
   margin-bottom: 20px;
 }
+
+.settings-grid {
+  width: 100%;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 35% 65%;
+  grid-gap: 20px;
+}
