@@ -28,14 +28,11 @@ export class ApiService {
       Params = Params.set('kCluster', kCluster);
     }
     if (distanceMetric) {
-      console.log('distance Metric: ' + distanceMetric)
       Params = Params.set('distanceMetric', distanceMetric);
     }
     if (clusterDetermination) {
       Params = Params.set('clusterDetermination', clusterDetermination);
     }
-
-    console.log(Params)
 
     const formData = new FormData()
     formData.append( 'file', new Blob([csv], { type: 'text/csv' }), csv.name);
