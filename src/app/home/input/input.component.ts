@@ -17,7 +17,9 @@ export class InputComponent {
   constructor(private http: HttpClient, private snackbar: MatSnackBar) { //http wird später für die API Anbindung benutzt
   }
 
+
   public file?: File;
+
 
   submit() {
     console.log(JSON.stringify(this.clusterInputFormGroup.value));
@@ -39,6 +41,7 @@ export class InputComponent {
   }
 
   private onFileChange(file: File){
+
 
     if(file.type == 'text/csv' || file.type =='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
       this.file = file;

@@ -4,7 +4,8 @@ on:
     branches:
       - main
 
-jobs:
+
+jobs: 
   sync-branches:
     runs-on: ubuntu-latest
     name: Syncing branches
@@ -24,3 +25,4 @@ jobs:
           TO_BRANCH: "test-deployment"
           PULL_REQUEST_TITLE: "Sync test-deployment with main"
           PULL_REQUEST_BODY: "For keeping test-deployment up to date with the recent changes made to main."
+
