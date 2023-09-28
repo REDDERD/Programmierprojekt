@@ -1,0 +1,25 @@
+name: Linting # Diese GitHub-Action muss erfoolgreich durchlaufen, sonst darf keine Pull-Req gemergt werden
+
+on:
+  push:
+    branches:
+      - '**'  # Wird für jeden Push auf jeden Branch durchgeführt
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run ng lint
+        run: npx ng lint
