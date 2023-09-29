@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
-import { type Router } from '@angular/router'
-import { type ResponseInterface } from '../interfaces/response-interface'
+import { Router } from '@angular/router'
+import { ResponseInterface } from '../interfaces/response-interface'
 
 @Component({
   selector: 'app-home',
@@ -11,18 +11,18 @@ export class HomeComponent {
   apiResponse: ResponseInterface | undefined
   isLoading: boolean = false
 
-  constructor (private readonly router: Router) {}
+  constructor (private router: Router) {}
 
-  public handleAPIResponse (response: ResponseInterface) {
+  public handleAPIResponse (response: ResponseInterface): void {
     this.apiResponse = response
     console.log(this.apiResponse)
   }
 
-  public handleLoading (status: boolean) {
+  public handleLoading (status: boolean): void {
     this.isLoading = status
   }
 
-  public routeToLogin () {
-    this.router.navigate(['/login'])
+  public routeToLogin (): void {
+    void this.router.navigate(['/login'])
   }
 }

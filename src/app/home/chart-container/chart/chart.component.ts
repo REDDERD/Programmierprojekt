@@ -15,13 +15,13 @@ export class ChartComponent implements AfterViewInit, OnChanges {
   datasets: ChartDatasetInterface[] = []
   @Input() apiResponse: ResponseInterface | undefined
 
-  ngAfterViewInit () {
+  ngAfterViewInit (): void {
     this.renderChart()
   }
 
-  ngOnChanges (changes: SimpleChanges) {
-    if (changes['apiResponse'].currentValue != undefined) {
-      if (this.apiResponse) {
+  ngOnChanges (changes: SimpleChanges): void {
+    if (changes['apiResponse'].currentValue !== undefined) {
+      if (this.apiResponse != null) {
         this.datasets = []
         this.chartData = this.apiResponse
       }
@@ -30,9 +30,10 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  generateDatasets () {
+  generateDatasets (): void {
     const centroids: Points[] = []
     const clusterArray: ChartDatasetInterface[] = []
+    // eslint-disable-next-line array-callback-return
     this.chartData.cluster.map(cluster => {
       const dataset: ChartDatasetInterface = {
         label: 'Cluster ' + (cluster.clusterNr + 1),
@@ -48,13 +49,15 @@ export class ChartComponent implements AfterViewInit, OnChanges {
       radius: 10
     }
     this.datasets.push(centroidDataset)
+    // eslint-disable-next-line array-callback-return
     clusterArray.map(cluster => {
       this.datasets.push(cluster)
     })
   }
 
-  renderChart () {
+  renderChart (): void {
     this.generateDatasets()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let image: string
     this.chart = new Chart('Chart', {
       type: 'scatter', // this denotes tha type of chart

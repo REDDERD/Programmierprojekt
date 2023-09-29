@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { type HttpClient, HttpParams } from '@angular/common/http'
-import { type Observable } from 'rxjs'
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -16,19 +16,19 @@ export class ApiService {
   ): Observable<any> {
     let Params: HttpParams = new HttpParams()
 
-    if (column1) {
+    if (column1 != null) {
       Params = Params.set('column1', column1)
     }
-    if (column2) {
+    if (column2 != null) {
       Params = Params.set('column2', column2)
     }
-    if (kCluster && kCluster > 0) {
+    if ((kCluster != null) && kCluster > 0) {
       Params = Params.set('kCluster', kCluster)
     }
-    if (distanceMetric) {
+    if (distanceMetric != null) {
       Params = Params.set('distanceMetric', distanceMetric)
     }
-    if (clusterDetermination) {
+    if (clusterDetermination != null) {
       Params = Params.set('clusterDetermination', clusterDetermination)
     }
 
@@ -42,5 +42,5 @@ export class ApiService {
     )
   }
 
-  constructor (private readonly http: HttpClient) { }
+  constructor (private http: HttpClient) { }
 }

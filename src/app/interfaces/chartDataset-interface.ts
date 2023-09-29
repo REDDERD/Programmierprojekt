@@ -1,11 +1,13 @@
+import { Points } from './response-interface'
+
 export interface ChartDatasetInterface {
   'label': string
-  'data': Object
+  'data': Points[]
 }
 
 export interface CentroidDatesetInterface {
   'label': string
-  'data': Object
+  'data': Points[]
   'pointStyle': string
   'radius': number
 }

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
-import { type MatSnackBar } from '@angular/material/snack-bar'
-import { type ApiService } from '../home-services/api.service'
-import { type ResponseInterface } from '../../interfaces/response-interface'
+import { MatSnackBar } from '@angular/material/snack-bar'
+import { ApiService } from '../home-services/api.service'
+import { ResponseInterface } from '../../interfaces/response-interface'
 
 @Component({
   selector: 'app-input',
@@ -21,17 +21,17 @@ export class InputComponent {
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   constructor (
-    private readonly snackbar: MatSnackBar,
-    private readonly apiService: ApiService
+    private snackbar: MatSnackBar,
+    private apiService: ApiService
   ) {
   }
 
   public file?: File
 
-  submit () {
+  submit (): void {
     console.log(this.clusterInputFormGroup.value)
 
-    if (this.file && this.clusterInputFormGroup.value.distanceMetric && this.clusterInputFormGroup.value.clusterDetermination) {
+    if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.clusterDetermination != null)) {
       this.isLoading.emit(true)
       this.apiService.postKmeans(
         this.file,
@@ -53,22 +53,22 @@ export class InputComponent {
     }
   }
 
-  onDragOver (event: any) {
+  onDragOver (event: any): void {
     event.preventDefault()
   }
 
-  onDropSuccess (event: any) {
+  onDropSuccess (event: any): void {
     event.preventDefault()
 
     this.onFileChange(event.dataTransfer.files[0]) // notice the "dataTransfer" used instead of "target"
   }
 
-  onChange (event: any) {
+  onChange (event: any): void {
     this.onFileChange(event.target.files[0])
   }
 
-  private onFileChange (file: File) {
-    if (file.type == 'text/csv' || file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+  private onFileChange (file: File): void {
+    if (file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       this.file = file
       this.snackbar.open('Datei ' + file.name + ' wird hochgeladen', 'Okay', { duration: 2000 })
     } else {
