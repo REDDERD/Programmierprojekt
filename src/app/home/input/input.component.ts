@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ApiService} from "../home-services/api.service";
-import {ResponseInterface} from "../../interfaces/response-interface";
+import { Component, EventEmitter, Output } from '@angular/core'
+import { FormControl, FormGroup } from '@angular/forms'
+import { MatSnackBar } from '@angular/material/snack-bar'
+import { ApiService } from '../home-services/api.service'
+import { ResponseInterface } from '../../interfaces/response-interface'
 
 @Component({
   selector: 'app-input',
@@ -14,68 +14,65 @@ export class InputComponent {
     clusterName: new FormControl(''),
     k: new FormControl(''),
     distanceMetric: new FormControl('EUCLIDEAN'),
-    clusterDetermination: new FormControl('ELBOW'),
-  });
+    clusterDetermination: new FormControl('ELBOW')
+  })
+
   @Output() apiResponse: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter<boolean>()
 
-  constructor(
-      private snackbar: MatSnackBar,
-      private apiService: ApiService,
-      ) {
+  constructor (
+    private snackbar: MatSnackBar,
+    private apiService: ApiService
+  ) {
   }
 
-  public file?: File;
+  public file?: File
 
-  submit() {
-    console.log(this.clusterInputFormGroup.value);
+  submit (): void {
+    console.log(this.clusterInputFormGroup.value)
 
-    if(this.file && this.clusterInputFormGroup.value.distanceMetric && this.clusterInputFormGroup.value.clusterDetermination) {
-      this.isLoading.emit(true);
+    if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.clusterDetermination != null)) {
+      this.isLoading.emit(true)
       this.apiService.postKmeans(
-          this.file,
-          undefined,
-          undefined,
-          Number(this.clusterInputFormGroup.value.k),
-          this.clusterInputFormGroup.value.distanceMetric,
-          this.clusterInputFormGroup.value.clusterDetermination
+        this.file,
+        undefined,
+        undefined,
+        Number(this.clusterInputFormGroup.value.k),
+        this.clusterInputFormGroup.value.distanceMetric,
+        this.clusterInputFormGroup.value.clusterDetermination
       ).subscribe((response: ResponseInterface) => {
-        this.apiResponse.emit(response);
-        this.isLoading.emit(false);
+        this.apiResponse.emit(response)
+        this.isLoading.emit(false)
       }, error => {
-        this.isLoading.emit(false);
-        this.snackbar.open('Ein Fehler ist aufgetreten. Meldung: ' + error.error.detail,'Okay');
-        console.log(error);
+        this.isLoading.emit(false)
+        this.snackbar.open('Ein Fehler ist aufgetreten. Meldung: ' + error.error.detail, 'Okay')
+        console.log(error)
       })
     } else {
-      this.snackbar.open('Bitte lade erst eine Datei hoch','Okay', {duration: 3000});
+      this.snackbar.open('Bitte lade erst eine Datei hoch', 'Okay', { duration: 3000 })
     }
   }
 
-  onDragOver(event: any){
-    event.preventDefault();
+  onDragOver (event: any): void {
+    event.preventDefault()
   }
 
-  onDropSuccess(event: any) {
-    event.preventDefault();
+  onDropSuccess (event: any): void {
+    event.preventDefault()
 
-    this.onFileChange(event.dataTransfer.files[0]);    // notice the "dataTransfer" used instead of "target"
+    this.onFileChange(event.dataTransfer.files[0]) // notice the "dataTransfer" used instead of "target"
   }
 
-  onChange(event:any){
-    this.onFileChange(event.target.files[0]);
+  onChange (event: any): void {
+    this.onFileChange(event.target.files[0])
   }
 
-  private onFileChange(file: File){
-    if(file.type == 'text/csv' || file.type =='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
-      this.file = file;
-      this.snackbar.open('Datei '+file.name+' wird hochgeladen','Okay', {duration: 2000});
-
-
+  private onFileChange (file: File): void {
+    if (file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      this.file = file
+      this.snackbar.open('Datei ' + file.name + ' wird hochgeladen', 'Okay', { duration: 2000 })
+    } else {
+      this.snackbar.open('Falsches Dateiformat', 'Okay', { duration: 3000 })
     }
-    else {
-      this.snackbar.open('Falsches Dateiformat','Okay', {duration: 3000});
-    }
-
   }
 }

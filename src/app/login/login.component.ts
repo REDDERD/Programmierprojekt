@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {Router} from "@angular/router";
+import { Component } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-login',
@@ -7,12 +7,11 @@ import {Router} from "@angular/router";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-
-  constructor(private router: Router) {
+  // eslint-disable-next-line
+  constructor (private router: Router) {
   }
 
-  public navigateToHome(){
-    this.router.navigate(['/home']);
+  public navigateToHome (): void {
+    void this.router.navigate(['/home'])
   }
-
 }

@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {ResponseInterface} from "../../interfaces/response-interface";
+import { Component, Input } from '@angular/core'
+import { type ResponseInterface } from '../../interfaces/response-interface'
 
 @Component({
   selector: 'app-chart-container',
@@ -7,5 +7,5 @@ import {ResponseInterface} from "../../interfaces/response-interface";
   styleUrls: ['./chart-container.component.css']
 })
 export class ChartContainerComponent {
-  @Input() apiResponse: ResponseInterface | undefined;
+  @Input() apiResponse: ResponseInterface | undefined
 }

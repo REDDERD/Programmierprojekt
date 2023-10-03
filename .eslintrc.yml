@@ -5,4 +5,8 @@ extends: standard-with-typescript
 parserOptions:
   ecmaVersion: latest
   sourceType: module
-rules: {}
+rules: {
+  '@typescript-eslint/consistent-type-imports': 'off',
+  '@typescript-eslint/consistent-type-exports': 'off',
+  '@typescript-eslint/prefer-readonly': 'off',
+}
