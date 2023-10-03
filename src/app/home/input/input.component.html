@@ -56,14 +56,13 @@
               <p>Methode zur Bestimmung von K</p>
             </div>
             <div>
-              <mat-button-toggle-group [attr.disabled]="true" name="kMethod" formControlName="clusterDetermination">
+              <mat-button-toggle-group name="kMethod" formControlName="clusterDetermination">
                 <mat-button-toggle value="ELBOW">Ellenbogen (Standard)</mat-button-toggle>
                 <mat-button-toggle value="SILHOUETTE">Silhouette</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
             <div class="grid-over-two-columns">
-              <mat-slide-toggle name="localSelector" aria-label="execute locally">Lokal im Browser ausführen
-              </mat-slide-toggle>
+              <mat-slide-toggle name="localSelector" aria-label="execute locally" formControlName="offlineKmeans">Lokal im Browser ausführen</mat-slide-toggle>
             </div>
           </div>
         </mat-expansion-panel>
