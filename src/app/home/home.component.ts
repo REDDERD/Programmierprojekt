@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {KMeansLocalService} from "./k-means-local.service";
 
 @Component({
   selector: 'app-home',
@@ -17,11 +16,10 @@ export class HomeComponent implements OnInit{
   ngOnInit() {
     console.log('CSV-lesen')
     //this.kmeans.test()
-    this.kmeans.loadCsvData(this.csvFilePath).subscribe((data) => {this.csvData = data;});
     console.log(this.csvData)
   }
 
-  constructor(private router: Router, private kmeans:KMeansLocalService) {}
+  constructor(private router: Router) {}
 
   public routeToLogin(){
     this.router.navigate(['/login'])

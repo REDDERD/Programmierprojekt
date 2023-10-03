@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {KMeansLocalService} from "../k-means-local.service";
 
 @Component({
   selector: 'app-input',
@@ -14,7 +15,7 @@ export class InputComponent {
     k: new FormControl(''),
   });
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar) { //http wird später für die API Anbindung benutzt
+  constructor(private http: HttpClient, private snackbar: MatSnackBar, private kMeansService: KMeansLocalService) { //http wird später für die API Anbindung benutzt
   }
 
 
@@ -45,6 +46,7 @@ export class InputComponent {
 
     if(file.type == 'text/csv' || file.type =='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
       this.file = file;
+      this.kMeansService.getCSVUpload(this.file);
       this.snackbar.open('Ich lade die Datei '+file.name+' hoch wenn die API Jungs soweit sind','Okay');
     }
     else {
