@@ -17,6 +17,13 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
+import {MatPseudoCheckboxModule} from "@angular/material/core";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatExpansionModule} from "@angular/material/expansion";
+
+
+
 const routes: Routes = [ { path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },]
@@ -29,18 +36,24 @@ const routes: Routes = [ { path: 'home', component: HomeComponent },
     ChartComponent,
     LoginComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    RouterModule.forRoot(routes),
-    MatInputModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MatSnackBarModule
-  ],
+
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatIconModule,
+        RouterModule.forRoot(routes),
+        MatInputModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        MatSnackBarModule,
+        MatPseudoCheckboxModule,
+        MatButtonToggleModule,
+        MatSlideToggleModule,
+        MatExpansionModule
+    ],
+
   providers: [],
   bootstrap: [AppComponent]
 })

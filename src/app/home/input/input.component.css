@@ -9,6 +9,15 @@
   width: 100%;
   display: grid;
   grid-template-columns: 50% 50%;
+  grid-gap: 20px;
+}
+
+.settings-grid {
+  width: 100%;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 35% 65%;
+  grid-gap: 20px;
 }
 
 .grid-over-two-columns {
@@ -22,10 +31,13 @@
   height: 200px;
   padding: 2rem;
   text-align: center;
-  border: dashed 1px gray;
+
+  border: dashed 1px rgb(128, 128, 128);
   position: relative;
   display: flex;
   flex-direction: column;
+
+
 
   margin-bottom: 20px;
 
@@ -38,3 +50,17 @@
   background-color: rgba(255, 64, 129, 0.05);
 
 }
+
+
+.file-display{
+  height: 20px;
+  padding: 1rem;
+  border: dashed 1px gray;
+  position: relative;
+  display: flex;
+  vertical-align: center;
+  border-radius: 5px;
+
+  margin-bottom: 20px;
+}
+
