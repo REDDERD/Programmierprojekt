@@ -14,9 +14,9 @@ export class HomeComponent implements OnInit{
 
 
   ngOnInit() {
-    console.log('CSV-lesen')
+    //console.log('CSV-lesen')
     //this.kmeans.test()
-    console.log(this.csvData)
+    //console.log(this.csvData)
   }
 
   constructor(private router: Router) {}

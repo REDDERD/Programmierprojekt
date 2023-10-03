@@ -6,27 +6,25 @@ import { Injectable } from '@angular/core';
 
 export class KMeansLocalService {
 
+  csvData: string[][] = [];
 
-  getCSVUpload(csv: File) {
+  loadCsvData(csv: File): void {
     console.log(csv);
+    if (csv) {
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        const content = fileReader.result as string;
+        this.csvData = this.csvTo2DArray(content);
+        console.log(this.csvData);
+      };
+      fileReader.readAsText(csv);
+    }
   }
-
   csvTo2DArray(csvData: string): string[][] {
-    console.log(csvData)
     const rows = csvData.split('\n');
     return rows.map(row => row.split(','));
   }
 
-
-
-  test(){
-    console.log("test kmeans")
-    // const csvFilePath = 'C:\\Users\\Klaas\\Dateien\\Eigene Dateien\\Studium\\Semester 5\\3) Programmierprojekt\\Git\\src\\app\\home\\clust-mock-data\\circles.csv';
-    //const csvFileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
-   // const csvFileContent = parse(csvFilePath)
-   // console.log(csvFileContent);
-
-  }
 
   constructor() { }
 }

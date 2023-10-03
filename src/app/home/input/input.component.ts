@@ -46,7 +46,7 @@ export class InputComponent {
 
     if(file.type == 'text/csv' || file.type =='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
       this.file = file;
-      this.kMeansService.getCSVUpload(this.file);
+      this.kMeansService.loadCsvData(this.file);
       this.snackbar.open('Ich lade die Datei '+file.name+' hoch wenn die API Jungs soweit sind','Okay');
     }
     else {
