@@ -3,7 +3,7 @@ import { ResponseInterface } from '../../../interfaces/response-interface'
 import { MockDaten } from '../chart/mock-daten'
 import { FlatTreeControl } from '@angular/cdk/tree'
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
-import {FlatTableDataset, TableDatasetInterface} from '../../../interfaces/tableDataset-interface'
+import { FlatTableDataset, TableDatasetInterface } from '../../../interfaces/tableDataset-interface'
 
 @Component({
   selector: 'app-table',
@@ -11,7 +11,7 @@ import {FlatTableDataset, TableDatasetInterface} from '../../../interfaces/table
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements AfterViewInit, OnChanges {
-  @Input() KmeansResult: ResponseInterface | undefined
+  @Input() kmeansResult: ResponseInterface | undefined
   tableDataRaw: ResponseInterface = MockDaten
   tableData: TableDatasetInterface[] = []
 
@@ -43,9 +43,9 @@ export class TableComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges (changes: SimpleChanges): void {
-    if (changes['KmeansResult'].currentValue !== undefined) {
-      if (this.KmeansResult != null) {
-        this.tableDataRaw = this.KmeansResult
+    if (changes['kmeansResult'].currentValue !== undefined) {
+      if (this.kmeansResult != null) {
+        this.tableDataRaw = this.kmeansResult
         this.fillTableData()
         this.dataSource.data = this.tableData
         console.log(this.tableData)
