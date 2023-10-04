@@ -15,7 +15,6 @@ export class HomeComponent {
 
   public handleAPIResponse (response: ResponseInterface): void {
     this.kmeansResult = response
-    console.log(this.kmeansResult)
   }
 
   public handleLoading (status: boolean): void {
