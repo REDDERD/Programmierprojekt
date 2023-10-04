@@ -20,10 +20,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatSelectModule } from '@angular/material/select'
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatExpansionModule } from '@angular/material/expansion'
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { TableComponent } from './home/chart-container/table/table.component'
-import {MatTabsModule} from "@angular/material/tabs";
-import {MatTableModule} from "@angular/material/table";
+import { MatTabsModule } from '@angular/material/tabs'
+import { MatTableModule } from '@angular/material/table'
 
 const routes: Routes = [{ path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
