@@ -13,17 +13,17 @@ export class ChartComponent implements AfterViewInit, OnChanges {
   public chart: any
   chartData: ResponseInterface = MockDaten
   datasets: ChartDatasetInterface[] = []
-  @Input() KmeansResult: ResponseInterface | undefined
+  @Input() kmeansResult: ResponseInterface | undefined
 
   ngAfterViewInit (): void {
     this.renderChart()
   }
 
   ngOnChanges (changes: SimpleChanges): void {
-    if (changes['KmeansResult'].currentValue !== undefined) {
-      if (this.KmeansResult != null) {
+    if (changes['kmeansResult'].currentValue !== undefined) {
+      if (this.kmeansResult != null) {
         this.datasets = []
-        this.chartData = this.KmeansResult
+        this.chartData = this.kmeansResult
       }
       this.chart.destroy()
       this.renderChart()

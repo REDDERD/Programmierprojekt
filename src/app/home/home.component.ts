@@ -8,14 +8,13 @@ import { ResponseInterface } from '../interfaces/response-interface'
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  KmeansResult: ResponseInterface | undefined
+  kmeansResult: ResponseInterface | undefined
   isLoading: boolean = false
 
   constructor (private router: Router) {}
 
   public handleAPIResponse (response: ResponseInterface): void {
-    this.KmeansResult = response
-    console.log(this.KmeansResult)
+    this.kmeansResult = response
   }
 
   public handleLoading (status: boolean): void {
