@@ -1,26 +1,29 @@
 export interface ResponseInterface {
-  "name": string,
-  "cluster": Array<Cluster>,
-  "x_label": string,
-  "y_label": string,
-  "iterations": number,
-  "distance_metric": string,
-  "silhouette_score": number,
-  "davies_bouldin_index": number,
+  'user_id': number
+  'request_id': number
+  'name': string
+  'cluster': Cluster[]
+  'x_label': string
+  'y_label': string
+  'iterations': number
+  'used_distance_metric': string
+  'used_optK_method': string
+  'clusters_elbow': number
+  'clusters_silhouette': number
 }
 
 interface Cluster {
-  "clusterNr": number,
-  "centroid": Centroid,
-  "points": Array<Points>
+  'clusterNr': number
+  'centroid': Centroid
+  'points': Points[]
 }
 
 export interface Points {
-  "x": number,
-  "y": number
+  'x': number
+  'y': number
 }
 
 interface Centroid {
-  "x": number,
-  "y": number
+  'x': number
+  'y': number
 }

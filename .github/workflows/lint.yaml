@@ -1,9 +1,9 @@
-name: Linting
+name: Linting # Diese GitHub-Action muss erfoolgreich durchlaufen, sonst darf keine Pull-Req gemergt werden
 
 on:
   push:
     branches:
-      - '**'  # Wird für jeden Push auf einen Branch durchgeführt
+      - '**'  # Wird für jeden Push auf jeden Branch durchgeführt
 
 jobs:
   lint:

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core'
+import { type ResponseInterface } from '../../interfaces/response-interface'
 
 @Component({
   selector: 'app-chart-container',
@@ -6,4 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./chart-container.component.css']
 })
 export class ChartContainerComponent {
+  @Input() kmeansResult: ResponseInterface | undefined
 }

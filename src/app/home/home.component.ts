@@ -1,28 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import { Component } from '@angular/core'
+import { Router } from '@angular/router'
+import { ResponseInterface } from '../interfaces/response-interface'
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+export class HomeComponent {
+  kmeansResult: ResponseInterface | undefined
+  isLoading: boolean = false
 
-export class HomeComponent implements OnInit{
+  constructor (private router: Router) {}
 
-  csvData: string[][] = [];
-  csvFilePath = 'C:\\Users\\Klaas\\Dateien\\Eigene Dateien\\Studium\\Semester 5\\3) Programmierprojekt\\Git\\src\\app\\home\\clust-mock-data\\circles.csv';
-
-
-  ngOnInit() {
-    //console.log('CSV-lesen')
-    //this.kmeans.test()
-    //console.log(this.csvData)
+  public handleAPIResponse (response: ResponseInterface): void {
+    this.kmeansResult = response
+    console.log(this.kmeansResult)
   }
 
-  constructor(private router: Router) {}
+  public handleLoading (status: boolean): void {
+    this.isLoading = status
+  }
 
-  public routeToLogin(){
-    this.router.navigate(['/login'])
+  public routeToLogin (): void {
+    void this.router.navigate(['/login'])
   }
 }
-

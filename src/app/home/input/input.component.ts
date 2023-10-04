@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {KMeansLocalService} from "../k-means-local.service";
+import { Component, EventEmitter, Output } from '@angular/core'
+import { FormControl, FormGroup } from '@angular/forms'
+import { MatSnackBar } from '@angular/material/snack-bar'
+import { ApiService } from '../home-services/api.service'
+import { ResponseInterface } from '../../interfaces/response-interface'
+import { KmeansLocalService } from '../home-services/kmeans-local.service'
 
 @Component({
   selector: 'app-input',
@@ -13,45 +14,80 @@ export class InputComponent {
   clusterInputFormGroup = new FormGroup({
     clusterName: new FormControl(''),
     k: new FormControl(''),
-  });
+    distanceMetric: new FormControl('EUCLIDEAN'),
+    clusterDetermination: new FormControl('ELBOW'),
+    offlineKmeans: new FormControl(false)
+  })
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar, private kMeansService: KMeansLocalService) { //http wird später für die API Anbindung benutzt
+  @Output() kmeansResult: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
+  @Output() isLoading: EventEmitter<boolean> = new EventEmitter<boolean>()
+
+  constructor (
+    private snackbar: MatSnackBar,
+    private apiService: ApiService,
+    private localKmeans: KmeansLocalService
+  ) {
   }
 
+  public file?: File
 
-  public file?: File;
-
-
-  submit() {
-    console.log(JSON.stringify(this.clusterInputFormGroup.value));
-  }
-
-  onDragOver(event: any){
-    event.preventDefault();
-  }
-
-  onDropSuccess(event: any) {
-    event.preventDefault();
-
-    this.onFileChange(event.dataTransfer.files[0]);    // notice the "dataTransfer" used instead of "target"
-  }
-
-  onChange(event:any){
-
-    this.onFileChange(event.target.files[0]);
-  }
-
-  private onFileChange(file: File){
-
-
-    if(file.type == 'text/csv' || file.type =='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
-      this.file = file;
-      this.kMeansService.loadCsvData(this.file);
-      this.snackbar.open('Ich lade die Datei '+file.name+' hoch wenn die API Jungs soweit sind','Okay');
+  submit (): void {
+    if (this.clusterInputFormGroup.value.offlineKmeans === true) {
+      if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.k != null)) {
+        this.isLoading.emit(true)
+        this.localKmeans.performKMeans(this.file, Number(this.clusterInputFormGroup.value.k), this.clusterInputFormGroup.value.distanceMetric)
+          .then((result) => {
+            this.kmeansResult.emit(result)
+            this.isLoading.emit(false)
+          }).catch((error) => {
+            console.log(error)
+            this.isLoading.emit(false)
+          })
+      }
+    } else {
+      if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.clusterDetermination != null)) {
+        this.isLoading.emit(true)
+        this.apiService.postKmeans(
+          this.file,
+          undefined,
+          undefined,
+          Number(this.clusterInputFormGroup.value.k),
+          this.clusterInputFormGroup.value.distanceMetric,
+          this.clusterInputFormGroup.value.clusterDetermination
+        ).subscribe((response: ResponseInterface) => {
+          this.kmeansResult.emit(response)
+          this.isLoading.emit(false)
+        }, error => {
+          this.isLoading.emit(false)
+          this.snackbar.open('Ein Fehler ist aufgetreten. Meldung: ' + error.error.detail, 'Okay')
+          console.log(error)
+        })
+      } else {
+        this.snackbar.open('Bitte lade erst eine Datei hoch', 'Okay', { duration: 3000 })
+      }
     }
-    else {
-      this.snackbar.open('Falsches Dateiformat','Okay');
-    }
+  }
 
+  onDragOver (event: any): void {
+    event.preventDefault()
+  }
+
+  onDropSuccess (event: any): void {
+    event.preventDefault()
+
+    this.onFileChange(event.dataTransfer.files[0]) // notice the "dataTransfer" used instead of "target"
+  }
+
+  onChange (event: any): void {
+    this.onFileChange(event.target.files[0])
+  }
+
+  private onFileChange (file: File): void {
+    if (file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      this.file = file
+      this.snackbar.open('Datei ' + file.name + ' wird hochgeladen', 'Okay', { duration: 2000 })
+    } else {
+      this.snackbar.open('Falsches Dateiformat', 'Okay', { duration: 3000 })
+    }
   }
 }
