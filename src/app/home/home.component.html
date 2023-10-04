@@ -1,6 +1,6 @@
 <mat-drawer-container autosize class="drawer-container">
   <!-- Drawer Content -->
-  <mat-drawer #drawer mode="side">
+  <mat-drawer #drawer mode="over">
     <div class="drawer-header">
       <h1>Historie</h1>
       <button mat-icon-button color="primary" (click)="drawer.toggle()" *ngIf="drawer.opened">
@@ -24,10 +24,10 @@
   </button>
   <div class="sidenav-content">
     <div class="sidenav-item-left">
-      <app-input (apiResponse)="handleAPIResponse($event)" (isLoading)="handleLoading($event)"></app-input>
+      <app-input (kmeansResult)="handleAPIResponse($event)" (isLoading)="handleLoading($event)"></app-input>
     </div>
     <div class="sidenav-item-right">
-      <app-chart-container [apiResponse]="apiResponse"></app-chart-container>
+      <app-chart-container [kmeansResult]="kmeansResult"></app-chart-container>
     </div>
   </div>
 </mat-drawer-container>
