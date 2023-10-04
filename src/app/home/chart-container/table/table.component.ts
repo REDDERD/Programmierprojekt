@@ -1,6 +1,8 @@
 import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {ResponseInterface} from "../../../interfaces/response-interface";
 import {MockDaten} from "../chart/mock-daten";
+import {FlatTreeControl} from "@angular/cdk/tree";
+import {MatTreeFlatDataSource, MatTreeFlattener} from "@angular/material/tree";
 
 interface tableDatasetInterface{
   name: string;
@@ -8,15 +10,47 @@ interface tableDatasetInterface{
   y: number;
   children?: tableDatasetInterface[]
 }
+
+interface flatTableDataset{
+  expandable: boolean;
+  name: string;
+  x: number;
+  y: undefined;
+  level: number;
+}
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements AfterViewInit, OnChanges {
+
   @Input() KmeansResult: ResponseInterface | undefined
   tableDataRaw: ResponseInterface = MockDaten;
   tableData: tableDatasetInterface[] = [];
+
+  displayColumns: string[] = ['name', 'x', 'y'];
+
+  private transformer = (node: tableDatasetInterface, level: number) => {
+    return {
+      expandable: !!node.children && node.children.length > 0,
+      name: node.name,
+      x: node.x,
+      y: node.y,
+      level: level,
+    };
+  }
+
+  treeControl = new FlatTreeControl<flatTableDataset>(
+    node => node.level, node => node.expandable);
+
+  treeFlattener = new MatTreeFlattener(
+    this.transformer, node => node.level,
+    node => node.expandable, node => node.children);
+
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+
+  hasChild = (_: number, node: flatTableDataset) => node.expandable;
 
   ngAfterViewInit (): void {
     this.fillTableData();
@@ -31,7 +65,9 @@ export class TableComponent implements AfterViewInit, OnChanges {
         this.fillTableData();
         console.log(this.tableData);
       }
-      this.tableData = [];
+      else{
+        this.tableData = [];
+      }
     }
   }
 
