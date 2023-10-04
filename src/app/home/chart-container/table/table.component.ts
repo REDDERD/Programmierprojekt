@@ -15,7 +15,7 @@ interface flatTableDataset{
   expandable: boolean;
   name: string;
   x: number;
-  y: undefined;
+  y: number;
   level: number;
 }
 @Component({
@@ -29,7 +29,7 @@ export class TableComponent implements AfterViewInit, OnChanges {
   tableDataRaw: ResponseInterface = MockDaten;
   tableData: tableDatasetInterface[] = [];
 
-  displayColumns: string[] = ['name', 'x', 'y'];
+  displayedColumns: string[] = ['name', 'x', 'y'];
 
   private transformer = (node: tableDatasetInterface, level: number) => {
     return {
