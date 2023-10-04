@@ -18,7 +18,34 @@ export class KmeansLocalService {
     return pointA.reduce((sum, value, index) => sum + Math.abs(value - pointB[index]), 0)
   }
 
-  async performKMeans (csv: File, k: number, distanceMetric: string): Promise<ResponseInterface> {
+  elbowMethod (data: number[][], maxClusters: number, distanceMetric: string): number {
+    const ssd: number[] = [] // Sum of Squared Distances for different cluster numbers
+
+    const distanceFunction = distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
+
+    for (let i = 1; i <= maxClusters; i++) {
+      const result = KMeans(data, i, { distanceFunction })
+      let currentSSD = 0
+      for (let j = 0; j < data.length; j++) {
+        const centroid = result.centroids[result.clusters[j]]
+        currentSSD += distanceFunction(data[j], centroid) ** 2
+      }
+      ssd.push(currentSSD)
+    }
+    // Calculate the rate of change of SSD (first derivative)
+    const ratesOfChange = ssd.slice(1).map((value, index) => ssd[index] - value)
+    // Calculate the second derivative
+    const secondDerivative = ratesOfChange.slice(1).map((value, index) => ratesOfChange[index] - value)
+    // Find the index of the maximum value in the second derivative
+    const elbowPoint = secondDerivative.indexOf(Math.max(...secondDerivative))
+    // Convert SSD values to an array of x and y coordinates
+    // const coordinates = ssd.map((value, index) => ({ x: index + 1, y: value }))
+
+    // Return the optimal number of clusters
+    return elbowPoint + 2 // +2 because the index is 0-based and we started from k=1
+  }
+
+  async performKMeans (csv: File, k: number, useOptK: boolean, distanceMetric: string): Promise<ResponseInterface> {
     return await new Promise<ResponseInterface>((resolve, reject) => {
       const fileReader = new FileReader()
 
@@ -30,6 +57,9 @@ export class KmeansLocalService {
           .map(row => row.map(value => parseFloat(value)))
           .filter(row => row.length === this.csvData[1].length)
 
+        if (useOptK) {
+          k = this.elbowMethod(dataAsNumbers, 100, distanceMetric)
+        }
         const result = KMeans(dataAsNumbers, k, {
           distanceFunction: distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
         })
