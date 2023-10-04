@@ -43,7 +43,6 @@ export class InputComponent {
             console.log(error)
             this.isLoading.emit(false)
           })
-        this.isLoading.emit(false)
       }
     } else {
       if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.clusterDetermination != null)) {
