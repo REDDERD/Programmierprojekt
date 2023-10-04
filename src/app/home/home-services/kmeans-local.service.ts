@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { kmeans as KMeans } from 'ml-kmeans'
 import { ResponseInterface } from '../../interfaces/response-interface'
+import { CsvTo2DArrayService } from './csv-to-2-d-array.service'
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class KmeansLocalService {
 
       fileReader.onload = () => {
         const content = fileReader.result as string
-        this.csvData = this.csvTo2DArray(content)
+        this.csvData = this.csvTo2DArrayService.csvTo2DArray(content)
 
         const dataAsNumbers = this.csvData.slice(1)
           .map(row => row.map(value => parseFloat(value)))
@@ -44,11 +45,6 @@ export class KmeansLocalService {
 
       fileReader.readAsText(csv)
     })
-  }
-
-  csvTo2DArray (csvData: string): string[][] {
-    const rows = csvData.split(/\r\n|\n|\r/)
-    return rows.map(row => row.split(','))
   }
 
   convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string): ResponseInterface {
@@ -89,5 +85,5 @@ export class KmeansLocalService {
     }
   }
 
-  // constructor () { }
+  constructor (private csvTo2DArrayService: CsvTo2DArrayService) { }
 }

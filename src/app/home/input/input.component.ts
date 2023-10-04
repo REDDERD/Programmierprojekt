@@ -19,7 +19,7 @@ export class InputComponent {
     offlineKmeans: new FormControl(false)
   })
 
-  @Output() KmeansResult: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
+  @Output() kmeansResult: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   constructor (
@@ -32,16 +32,18 @@ export class InputComponent {
   public file?: File
 
   submit (): void {
-    // console.log(this.clusterInputFormGroup.value)
-
     if (this.clusterInputFormGroup.value.offlineKmeans === true) {
       if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.k != null)) {
+        this.isLoading.emit(true)
         this.localKmeans.performKMeans(this.file, Number(this.clusterInputFormGroup.value.k), this.clusterInputFormGroup.value.distanceMetric)
           .then((result) => {
-            this.KmeansResult.emit(result)
+            this.kmeansResult.emit(result)
+            this.isLoading.emit(false)
           }).catch((error) => {
             console.log(error)
+            this.isLoading.emit(false)
           })
+        this.isLoading.emit(false)
       }
     } else {
       if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.clusterDetermination != null)) {
@@ -54,7 +56,7 @@ export class InputComponent {
           this.clusterInputFormGroup.value.distanceMetric,
           this.clusterInputFormGroup.value.clusterDetermination
         ).subscribe((response: ResponseInterface) => {
-          this.KmeansResult.emit(response)
+          this.kmeansResult.emit(response)
           this.isLoading.emit(false)
         }, error => {
           this.isLoading.emit(false)
