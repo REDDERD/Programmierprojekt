@@ -17,8 +17,9 @@
 }
 
 .sidenav-item-left {
-  flex:0 0 50%;
+  flex: 0 0 50%;
   margin-right: 50px;
+  align-self: baseline;
 }
 
 .sidenav-item-right {
