@@ -7,5 +7,5 @@ import { type ResponseInterface } from '../../interfaces/response-interface'
   styleUrls: ['./chart-container.component.css']
 })
 export class ChartContainerComponent {
-  @Input() apiResponse: ResponseInterface | undefined
+  @Input() kmeansResult: ResponseInterface | undefined
 }
