@@ -54,6 +54,7 @@ export class TableComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit (): void {
     this.fillTableData();
+    this.dataSource.data = this.tableData;
     console.log(this.tableData);
 
   }
@@ -63,10 +64,12 @@ export class TableComponent implements AfterViewInit, OnChanges {
       if (this.KmeansResult != null) {
         this.tableDataRaw = this.KmeansResult;
         this.fillTableData();
+        this.dataSource.data = this.tableData;
         console.log(this.tableData);
       }
       else{
         this.tableData = [];
+        this.dataSource.data = this.tableData;
       }
     }
   }
@@ -77,7 +80,7 @@ export class TableComponent implements AfterViewInit, OnChanges {
     this.tableDataRaw.cluster.map(cluster =>{
 
      const dataset: tableDatasetInterface = {
-       name: 'Cluster' + (cluster.clusterNr + 1),
+       name: 'Centroid ' + (cluster.clusterNr + 1),
        x: cluster.centroid.x,
        y: cluster.centroid.y,
        children: []

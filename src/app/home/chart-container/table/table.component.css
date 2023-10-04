@@ -1,3 +1,6 @@
 table {
   width: 100%;
 }
+tr.mat-footer-row {
+  height: 10px !important;
+}

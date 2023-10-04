@@ -1,9 +1,10 @@
-<mat-tab-group>
-  <mat-tab label="Graph">
-    <app-chart [KmeansResult]="KmeansResult"></app-chart>
-  </mat-tab>
-  <mat-tab label="Tabelle">
-    <app-table [KmeansResult]="KmeansResult"></app-table>
-  </mat-tab>
-</mat-tab-group>
-
+<div style="height: 100%">
+  <mat-tab-group class="container">
+    <mat-tab label="Graph">
+      <app-chart [KmeansResult]="KmeansResult"></app-chart>
+    </mat-tab>
+    <mat-tab label="Tabelle">
+      <app-table [KmeansResult]="KmeansResult"></app-table>
+    </mat-tab>
+  </mat-tab-group>
+</div>

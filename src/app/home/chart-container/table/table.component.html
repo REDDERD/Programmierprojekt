@@ -3,7 +3,7 @@
     <th mat-header-cell *matHeaderCellDef>
       <span [style.paddingLeft.px]="40"> Name </span>
     </th>
-    <td mat-cell *matCellDef="let data">
+    <td mat-cell *matCellDef="let data" class="table-row">
       <button mat-icon-button
               [style.visibility]="!data.expandable ? 'hidden' : ''"
               [style.marginLeft.px]="data.level * 32"
@@ -19,12 +19,12 @@
 
   <ng-container matColumnDef="x">
     <th mat-header-cell *matHeaderCellDef> x </th>
-    <td mat-cell *matCellDef="let data"> {{data.x}} </td>
+    <td mat-cell *matCellDef="let data" class="table-row"> {{data.x}} </td>
   </ng-container>
 
   <ng-container matColumnDef="y">
     <th mat-header-cell *matHeaderCellDef> y </th>
-    <td mat-cell *matCellDef="let data"> {{data.y}} </td>
+    <td mat-cell *matCellDef="let data" class="table-row"> {{data.y}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
