@@ -26,4 +26,5 @@ export interface Points {
 interface Centroid {
   'x': number
   'y': number
+
 }

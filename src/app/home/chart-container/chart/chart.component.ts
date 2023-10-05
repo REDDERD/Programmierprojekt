@@ -9,11 +9,13 @@ import { MockDaten } from './mock-daten'
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
+
 export class ChartComponent implements AfterViewInit, OnChanges {
   public chart: any
   chartData: ResponseInterface = MockDaten
   datasets: ChartDatasetInterface[] = []
   @Input() kmeansResult: ResponseInterface | undefined
+
 
   ngAfterViewInit (): void {
     this.renderChart()
@@ -88,10 +90,12 @@ export class ChartComponent implements AfterViewInit, OnChanges {
               text: this.chartData.y_label
             }
           },
+
           x: {
             title: {
               display: true,
               text: this.chartData.x_label
+
             }
           }
         }

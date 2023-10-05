@@ -70,6 +70,7 @@ export class InputComponent {
         this.snackbar.open('Bitte lade erst eine Datei hoch', 'Okay', { duration: 3000 })
       }
     }
+
   }
 
   onDragOver (event: any): void {
@@ -92,6 +93,7 @@ export class InputComponent {
       this.snackbar.open('Datei ' + file.name + ' wird hochgeladen', 'Okay', { duration: 2000 })
     } else {
       this.snackbar.open('Falsches Dateiformat', 'Okay', { duration: 3000 })
+
     }
   }
 }

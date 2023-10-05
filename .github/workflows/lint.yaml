@@ -5,6 +5,7 @@ on:
     branches:
       - '**'  # Wird für jeden Push auf jeden Branch durchgeführt
 
+
 jobs:
   lint:
     runs-on: ubuntu-latest

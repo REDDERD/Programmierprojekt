@@ -7,6 +7,7 @@
     </mat-form-field>
 
     <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
+
       <input type="file" style="display: none" (change)="onChange($event)" #fileUpload >
 
       <h3>Ziehe eine .csv / .xslx Datei per Drag & Drop hierher</h3>
@@ -14,11 +15,14 @@
 
       <div class="button-row">
         <button mat-raised-button (click)="fileUpload.click()" color="accent" type="button">
+
           Lade eine Datei hoch <mat-icon>upload_file</mat-icon>
+
         </button>
       </div>
 
     </div>
+
 
     <div class="grid-over-two-columns file-display" *ngIf="file">
       <mat-icon style="margin-right: 20px">insert_drive_file</mat-icon>
@@ -26,6 +30,7 @@
     </div>
 
     <div class="grid-over-two-columns" style="margin-bottom: 22px;">
+
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -33,7 +38,9 @@
           </mat-expansion-panel-header>
 
 
+
           <div class="settings-grid">
+
             <div>Anzahl der Cluster (optional)</div>
             <div>
               <mat-form-field floatLabel="always">
@@ -52,6 +59,7 @@
                 <mat-button-toggle value="JACCARDS">Jaccard</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
+
             <div>
               <p>Methode zur Bestimmung von K</p>
             </div>
@@ -65,11 +73,13 @@
               <mat-slide-toggle name="localSelector" aria-label="execute locally" formControlName="offlineKmeans">Lokal im Browser ausführen</mat-slide-toggle>
             </div>
           </div>
+
         </mat-expansion-panel>
       </mat-accordion>
     </div>
 
 
     <button mat-raised-button class="grid-over-two-columns" color="primary" disabled="{{ !file }}">K-Means durchführen</button>
+
   </form>
 </div>

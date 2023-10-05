@@ -10,4 +10,5 @@ export interface CentroidDatesetInterface {
   'data': Points[]
   'pointStyle': string
   'radius': number
+
 }

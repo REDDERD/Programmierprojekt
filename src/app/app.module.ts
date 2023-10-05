@@ -38,6 +38,7 @@ const routes: Routes = [{ path: 'home', component: HomeComponent },
     LoginComponent,
     TableComponent
   ],
+
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -57,6 +58,7 @@ const routes: Routes = [{ path: 'home', component: HomeComponent },
     MatTabsModule,
     MatTableModule
   ],
+    
   providers: [],
   bootstrap: [AppComponent]
 })

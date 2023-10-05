@@ -10,6 +10,7 @@
   display: grid;
   grid-template-columns: 50% 50%;
   grid-gap: 20px;
+
 }
 
 .grid-over-two-columns {
@@ -24,10 +25,13 @@
   padding: 2rem;
   text-align: center;
   border: dashed 1px #808080FF;
+
   position: relative;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
+
+
 
   margin-bottom: 20px;
 
@@ -40,6 +44,7 @@
 
 }
 
+
 .file-display{
   height: 20px;
   padding: 1rem;
@@ -51,6 +56,7 @@
 
   margin-bottom: 20px;
 }
+
 
 .settings-grid {
   width: 100%;
