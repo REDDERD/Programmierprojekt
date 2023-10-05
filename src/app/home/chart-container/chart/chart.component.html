@@ -1,6 +1,9 @@
-<div class="chart">
-  <canvas class="chart-canvas" id="Chart">{{ chart }}</canvas>
+<div style="overflow-y: hidden">
+  <div class="chart">
+    <canvas class="chart-canvas" id="Chart">{{ chart }}</canvas>
+  </div>
+  <a id="chartDownload">
+    <button mat-button>Download Chart</button>
+  </a>
+
 </div>
-<a id="chartDownload">
-  <button mat-button>Download Chart</button>
-</a>
