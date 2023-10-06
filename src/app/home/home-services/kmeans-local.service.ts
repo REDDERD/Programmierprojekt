@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core'
 import { kmeans as KMeans } from 'ml-kmeans'
 import { ResponseInterface } from '../../interfaces/response-interface'
-import { CsvTo2DArrayService } from './csv-to-2-d-array.service'
-import { ExcelTo2DArrayService } from './excel-to-2-d-array.service'
+import { DataTo2dArrayService } from './data-to-2d-array.service'
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +10,15 @@ export class KmeansLocalService {
   data: string[][] = []
   clusters: any[] = []
 
-  euclideanDistance (pointA: number[], pointB: number[]): number {
+  private euclideanDistance (pointA: number[], pointB: number[]): number {
     return Math.sqrt(pointA.reduce((sum, value, index) => sum + Math.pow(value - pointB[index], 2), 0))
   }
 
-  manhattanDistance (pointA: number[], pointB: number[]): number {
+  private manhattanDistance (pointA: number[], pointB: number[]): number {
     return pointA.reduce((sum, value, index) => sum + Math.abs(value - pointB[index]), 0)
   }
 
-  elbowMethod (data: number[][], maxClusters: number, distanceMetric: string): number {
+  private elbowMethod (data: number[][], maxClusters: number, distanceMetric: string): number {
     const ssd: number[] = [] // Sum of Squared Distances for different cluster numbers
 
     const distanceFunction = distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
@@ -47,15 +46,7 @@ export class KmeansLocalService {
   }
 
   async performKMeans (file: File, k: number, useOptK: boolean, distanceMetric: string): Promise<ResponseInterface> {
-    const fileExtension = file.name.split('.').pop()?.toLowerCase()
-
-    if (fileExtension === 'csv') {
-      this.data = await this.csvTo2DArrayService.csvTo2DArray(file)
-    } else if (fileExtension === 'xlsx') {
-      this.data = await this.excelTo2DArrayService.excelTo2DArray(file)
-    } else {
-      throw new Error('Unsupported file format')
-    }
+    this.data = await this.dataTo2DArrayService.dataTo2DArray(file)
 
     const dataAsNumbers = this.data.slice(1)
       .map(row => row.map(value => parseFloat(value)))
@@ -72,7 +63,7 @@ export class KmeansLocalService {
     return this.convertToJSONFormat(result, dataAsNumbers, file.name, distanceMetric)
   }
 
-  convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string): ResponseInterface {
+  private convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string): ResponseInterface {
     if (this.data.length === 0 || this.data[0].length < 2) {
       console.error('Invalid CSV data format')
     }
@@ -111,7 +102,6 @@ export class KmeansLocalService {
   }
 
   constructor (
-    private csvTo2DArrayService: CsvTo2DArrayService,
-    private excelTo2DArrayService: ExcelTo2DArrayService
+    private dataTo2DArrayService: DataTo2dArrayService
   ) {}
 }

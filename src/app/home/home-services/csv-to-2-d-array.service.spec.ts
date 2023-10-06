@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 
-import { CsvTo2DArrayService } from './csv-to-2-d-array.service'
+import { DataTo2dArrayService } from './data-to-2d-array.service'
 
 describe('CsvTo2DArrayService', () => {
-  let service: CsvTo2DArrayService
+  let service: DataTo2dArrayService
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(CsvTo2DArrayService)
+    service = TestBed.inject(DataTo2dArrayService)
   })
 
   it('should be created', () => {
