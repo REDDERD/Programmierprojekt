@@ -40,9 +40,33 @@ export class CsvTo2DArrayService {
     return bestDelimiter
   }
 
-  csvTo2DArray (csvData: string): string[][] {
+  csvTo2DArray2 (csvData: string): string[][] {
     const delimiter = this.detectDelimiter(csvData)
     const rows = csvData.split(/\r\n|\n|\r/)
     return rows.map(row => row.split(delimiter))
+  }
+
+  async csvTo2DArray (file: File): Promise<string[][]> {
+    return await new Promise<string[][]>((resolve, reject) => {
+      const fileReader = new FileReader()
+
+      fileReader.onload = () => {
+        try {
+          const content = fileReader.result as string
+          const delimiter = this.detectDelimiter(content)
+          const rows = content.split(/\r\n|\n|\r/)
+          const data = rows.map(row => row.split(delimiter))
+          resolve(data)
+        } catch (error) {
+          reject(new Error('Failed to process the CSV file.'))
+        }
+      }
+
+      fileReader.onerror = () => {
+        reject(new Error('Failed to read the CSV file.'))
+      }
+
+      fileReader.readAsText(file)
+    })
   }
 }
