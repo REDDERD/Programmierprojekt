@@ -12,7 +12,7 @@ export interface ResponseInterface {
   'clusters_silhouette': number
 }
 
-interface Cluster {
+export interface Cluster {
   'clusterNr': number
   'centroid': Centroid
   'points': Points[]

@@ -1,1 +1,12 @@
-<app-chart [kmeansResult]="kmeansResult"></app-chart>
+<div style="height: 100%">
+  <mat-tab-group class="container">
+    <mat-tab label="Graph" style="">
+
+        <app-chart [kmeansResult]="kmeansResult"></app-chart>
+
+    </mat-tab>
+    <mat-tab label="Tabelle">
+      <app-table [kmeansResult]="kmeansResult"></app-table>
+    </mat-tab>
+  </mat-tab-group>
+</div>

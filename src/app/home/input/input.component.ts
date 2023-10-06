@@ -35,8 +35,11 @@ export class InputComponent {
     if (this.clusterInputFormGroup.value.offlineKmeans === true) {
       if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null)) {
         this.isLoading.emit(true)
-        this.localKmeans.performKMeans(this.file, this.clusterInputFormGroup.value.k !== '' ? Number(this.clusterInputFormGroup.value.k) : 0,
-          this.clusterInputFormGroup.value.k === '', this.clusterInputFormGroup.value.distanceMetric)
+        this.localKmeans.performKMeans(
+          this.file,
+          Number(this.clusterInputFormGroup.value.k) !== 0 ? Number(this.clusterInputFormGroup.value.k) : 0,
+          Number(this.clusterInputFormGroup.value.k) === 0,
+          this.clusterInputFormGroup.value.distanceMetric)
           .then((result) => {
             this.kmeansResult.emit(result)
             this.isLoading.emit(false)
