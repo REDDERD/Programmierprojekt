@@ -7,7 +7,7 @@ import { CsvTo2DArrayService } from './csv-to-2-d-array.service'
   providedIn: 'root'
 })
 export class KmeansLocalService {
-  csvData: string[][] = []
+  data: string[][] = []
   clusters: any[] = []
 
   euclideanDistance (pointA: number[], pointB: number[]): number {
@@ -51,11 +51,11 @@ export class KmeansLocalService {
 
       fileReader.onload = () => {
         const content = fileReader.result as string
-        this.csvData = this.csvTo2DArrayService.csvTo2DArray(content)
+        this.data = this.csvTo2DArrayService.csvTo2DArray(content)
 
-        const dataAsNumbers = this.csvData.slice(1)
+        const dataAsNumbers = this.data.slice(1)
           .map(row => row.map(value => parseFloat(value)))
-          .filter(row => row.length === this.csvData[1].length)
+          .filter(row => row.length === this.data[1].length)
 
         if (useOptK) {
           k = this.elbowMethod(dataAsNumbers, 100, distanceMetric)
@@ -78,12 +78,12 @@ export class KmeansLocalService {
   }
 
   convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string): ResponseInterface {
-    if (this.csvData.length === 0 || this.csvData[0].length < 2) {
+    if (this.data.length === 0 || this.data[0].length < 2) {
       console.error('Invalid CSV data format')
     }
 
-    const xLabel = this.csvData[0][0]
-    const yLabel = this.csvData[0][1]
+    const xLabel = this.data[0][0]
+    const yLabel = this.data[0][1]
 
     const clusters = result.centroids.map((centroid: number[], index: number) => {
       const points = data.filter((_, dataIndex) => result.clusters[dataIndex] === index)

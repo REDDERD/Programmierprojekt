@@ -24,7 +24,7 @@ export class CsvTo2DArrayService {
         currentDelimiterCount += count
       }
 
-      // Check if the delimiter appears the same number of times in each line (consistency check)
+      // Check if the delimiter appears the same number of times in each line
       const uniqueCounts = new Set(counts)
       if (uniqueCounts.size === 1 && currentDelimiterCount > bestDelimiterCount) {
         bestDelimiter = delimiter
