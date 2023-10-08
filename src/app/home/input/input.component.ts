@@ -39,14 +39,12 @@ export class InputComponent {
     if (this.clusterInputFormGroup.value.offlineKmeans === true) {
       if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null)) {
         this.isLoading.emit(true)
-        console.log(this.selectedColumnsValue)
-        console.log(this.selectedColumnsIndices)
         this.localKmeans.performKMeans(
           this.file,
           Number(this.clusterInputFormGroup.value.k) !== 0 ? Number(this.clusterInputFormGroup.value.k) : 0,
           Number(this.clusterInputFormGroup.value.k) === 0,
           this.clusterInputFormGroup.value.distanceMetric,
-          this.selectedColumnsIndices ?? [0, 1])
+          this.selectedColumnsIndices)
           .then((result) => {
             this.kmeansResult.emit(result)
             this.isLoading.emit(false)
@@ -60,8 +58,8 @@ export class InputComponent {
         this.isLoading.emit(true)
         this.apiService.postKmeans(
           this.file,
-          undefined,
-          undefined,
+          this.selectedColumnsIndices[0],
+          this.selectedColumnsIndices[1],
           Number(this.clusterInputFormGroup.value.k),
           this.clusterInputFormGroup.value.distanceMetric,
           this.clusterInputFormGroup.value.clusterDetermination
