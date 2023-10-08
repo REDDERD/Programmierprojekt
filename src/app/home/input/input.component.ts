@@ -140,4 +140,19 @@ export class InputComponent {
   get selectedColumnsIndices (): number[] {
     return this.selectedColumnsValue.map(name => this.columnNames.indexOf(name))
   }
+
+  onOfflineChange (): void {
+    const isOffline = this.clusterInputFormGroup.value.offlineKmeans
+    const distanceMetricControl = this.clusterInputFormGroup.get('distanceMetric')
+    const kDeterminationMethodControl = this.clusterInputFormGroup.get('clusterDetermination')
+
+    if (isOffline === true) {
+      if (distanceMetricControl?.value === 'JACCARDS') {
+        distanceMetricControl.setValue('EUCLIDEAN')
+      }
+      if (kDeterminationMethodControl?.value === 'SILHOUETTE') {
+        kDeterminationMethodControl.setValue('ELBOW')
+      }
+    }
+  }
 }
