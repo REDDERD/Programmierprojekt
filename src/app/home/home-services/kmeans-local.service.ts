@@ -45,13 +45,13 @@ export class KmeansLocalService {
     return elbowPoint + 2 // +2 because the index is 0-based and we started from k=1
   }
 
-  async performKMeans (file: File, k: number, useOptK: boolean, distanceMetric: string): Promise<ResponseInterface> {
+  async performKMeans (file: File, k: number, useOptK: boolean, distanceMetric: string, selectedIndices: number[]): Promise<ResponseInterface> {
     this.data = await this.dataTo2DArrayService.dataTo2DArray(file)
-
+    this.data = this.data.map(row => { return selectedIndices.map(index => row[index]) })
+    this.data = this.data.filter(row => row.some(value => value !== undefined && value !== ''))
     const dataAsNumbers = this.data.slice(1)
       .map(row => row.map(value => parseFloat(value)))
       .filter(row => row.length === this.data[1].length)
-
     if (useOptK) {
       k = this.elbowMethod(dataAsNumbers, 100, distanceMetric)
     }

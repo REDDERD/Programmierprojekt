@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing'
 
 import { DataTo2dArrayService } from './data-to-2d-array.service'
 
-describe('CsvTo2DArrayService', () => {
+describe('DataTo2DArrayService', () => {
   let service: DataTo2dArrayService
 
   beforeEach(() => {

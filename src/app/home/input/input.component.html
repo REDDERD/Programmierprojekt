@@ -34,9 +34,21 @@
 
 
           <div class="settings-grid">
+            <div>Spaltenauswahl</div>
+            <mat-form-field class="fixed-width-field"
+                            [class.has-error]="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')">
+              <mat-label>Spalten</mat-label>
+              <mat-select multiple formControlName="selectedColumns" [(value)]="selectedColumnsValue">
+                <mat-option *ngFor="let column of columnNames" [value]="column">{{column}} </mat-option>
+              </mat-select>
+              <mat-error *ngIf="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')">
+                Bitte genau 2 Spalten auswählen.
+              </mat-error>
+            </mat-form-field>
+
             <div>Anzahl der Cluster (optional)</div>
             <div>
-              <mat-form-field floatLabel="always">
+              <mat-form-field floatLabel="always" class="fixed-width-field">
                 <mat-label>k definieren (optional)</mat-label>
                 <input matInput type="number" formControlName="k" min="0">
                 <span matTextPrefix>k= </span>
@@ -70,6 +82,6 @@
     </div>
 
 
-    <button mat-raised-button class="grid-over-two-columns" color="primary" disabled="{{ !file }}">K-Means durchführen</button>
+    <button mat-raised-button class="grid-over-two-columns" color="primary" [disabled]="!clusterInputFormGroup.valid || !file">K-Means durchführen</button>
   </form>
 </div>
