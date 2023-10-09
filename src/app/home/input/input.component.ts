@@ -53,8 +53,9 @@ export class InputComponent {
             this.kmeansResult.emit(result)
             this.isLoading.emit(false)
           }).catch((error) => {
-            console.log(error)
             this.isLoading.emit(false)
+            this.snackbar.open('Ein Fehler ist aufgetreten: ' + error.message, 'Okay')
+            console.log(error)
           })
       }
     } else {
