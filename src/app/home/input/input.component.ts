@@ -92,7 +92,8 @@ export class InputComponent {
   }
 
   private onFileChange (file: File): void {
-    if (file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+    const fileExtension = file.name.split('.').pop()?.toLowerCase()
+    if (fileExtension === 'csv' || fileExtension === 'xlsx') {
       this.file = file
       this.snackbar.open('Datei ' + file.name + ' wird hochgeladen', 'Okay', { duration: 2000 })
 
