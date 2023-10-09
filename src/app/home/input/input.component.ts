@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Output } from '@angular/core'
-import { FormControl, FormGroup } from '@angular/forms'
+import { FormControl, FormGroup, ValidatorFn, AbstractControl } from '@angular/forms'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { ApiService } from '../home-services/api.service'
 import { ResponseInterface } from '../../interfaces/response-interface'
 import { KmeansLocalService } from '../home-services/kmeans-local.service'
+import { DataTo2dArrayService } from '../home-services/data-to-2d-array.service'
 
 @Component({
   selector: 'app-input',
@@ -16,7 +17,8 @@ export class InputComponent {
     k: new FormControl(''),
     distanceMetric: new FormControl('EUCLIDEAN'),
     clusterDetermination: new FormControl('ELBOW'),
-    offlineKmeans: new FormControl(false)
+    offlineKmeans: new FormControl(false),
+    selectedColumns: new FormControl<number[]>([], [this.twoColumnsSelectedValidator()])
   })
 
   @Output() kmeansResult: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
@@ -25,11 +27,13 @@ export class InputComponent {
   constructor (
     private snackbar: MatSnackBar,
     private apiService: ApiService,
-    private localKmeans: KmeansLocalService
+    private localKmeans: KmeansLocalService,
+    private dataTo2DArrayService: DataTo2dArrayService
   ) {
   }
 
   public file?: File
+  public columnNames: string[] = []
 
   submit (): void {
     if (this.clusterInputFormGroup.value.offlineKmeans === true) {
@@ -39,7 +43,8 @@ export class InputComponent {
           this.file,
           Number(this.clusterInputFormGroup.value.k) !== 0 ? Number(this.clusterInputFormGroup.value.k) : 0,
           Number(this.clusterInputFormGroup.value.k) === 0,
-          this.clusterInputFormGroup.value.distanceMetric)
+          this.clusterInputFormGroup.value.distanceMetric,
+          this.selectedColumnsIndices)
           .then((result) => {
             this.kmeansResult.emit(result)
             this.isLoading.emit(false)
@@ -53,8 +58,8 @@ export class InputComponent {
         this.isLoading.emit(true)
         this.apiService.postKmeans(
           this.file,
-          undefined,
-          undefined,
+          this.selectedColumnsIndices[0],
+          this.selectedColumnsIndices[1],
           Number(this.clusterInputFormGroup.value.k),
           this.clusterInputFormGroup.value.distanceMetric,
           this.clusterInputFormGroup.value.clusterDetermination
@@ -90,8 +95,64 @@ export class InputComponent {
     if (file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       this.file = file
       this.snackbar.open('Datei ' + file.name + ' wird hochgeladen', 'Okay', { duration: 2000 })
+
+      this.dataTo2DArrayService.dataTo2DArray(file).then(data => {
+        // Spaltennamen (Header) extrahieren
+        if (data !== null && data !== undefined && data.length > 0) {
+          this.columnNames = data[0]
+        }
+        this.clusterInputFormGroup.get('selectedColumns')?.setValue([])
+      }).catch(error => {
+        this.snackbar.open('Fehler beim Lesen der Datei', 'Okay', { duration: 3000 })
+        console.error(error)
+      })
     } else {
       this.snackbar.open('Falsches Dateiformat', 'Okay', { duration: 3000 })
+    }
+  }
+
+  twoColumnsSelectedValidator (): ValidatorFn {
+    return (control: AbstractControl): Record<string, any> | null => {
+      const selected = control.value
+      if (selected !== null && selected !== undefined && selected.length === 2) {
+        return null // Kein Fehler
+      } else {
+        return { twoColumnsRequired: true } // Fehler
+      }
+    }
+  }
+
+  get selectedColumnsValue (): string[] {
+    const value = this.clusterInputFormGroup.get('selectedColumns')?.value
+    if (value === null || value === undefined || value.length === 0) {
+      if (Array.isArray(this.columnNames) && this.columnNames.length > 1) {
+        return [this.columnNames[0], this.columnNames[1]]
+      }
+      return []
+    }
+    return value.map((val: number) => val.toString())
+  }
+
+  set selectedColumnsValue (value: number[] | null) {
+    this.clusterInputFormGroup.get('selectedColumns')?.setValue(value)
+  }
+
+  get selectedColumnsIndices (): number[] {
+    return this.selectedColumnsValue.map(name => this.columnNames.indexOf(name))
+  }
+
+  onOfflineChange (): void {
+    const isOffline = this.clusterInputFormGroup.value.offlineKmeans
+    const distanceMetricControl = this.clusterInputFormGroup.get('distanceMetric')
+    const kDeterminationMethodControl = this.clusterInputFormGroup.get('clusterDetermination')
+
+    if (isOffline === true) {
+      if (distanceMetricControl?.value === 'JACCARDS') {
+        distanceMetricControl.setValue('EUCLIDEAN')
+      }
+      if (kDeterminationMethodControl?.value === 'SILHOUETTE') {
+        kDeterminationMethodControl.setValue('ELBOW')
+      }
     }
   }
 }

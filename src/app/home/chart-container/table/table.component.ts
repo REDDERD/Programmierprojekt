@@ -39,7 +39,6 @@ export class TableComponent implements AfterViewInit, OnChanges {
   ngAfterViewInit (): void {
     this.fillTableData()
     this.dataSource.data = this.tableData
-    console.log(this.tableData)
   }
 
   ngOnChanges (changes: SimpleChanges): void {
@@ -48,7 +47,6 @@ export class TableComponent implements AfterViewInit, OnChanges {
         this.tableDataRaw = this.kmeansResult
         this.fillTableData()
         this.dataSource.data = this.tableData
-        console.log(this.tableData)
       } else {
         this.tableData = []
         this.dataSource.data = this.tableData

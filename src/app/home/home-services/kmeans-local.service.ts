@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core'
 import { kmeans as KMeans } from 'ml-kmeans'
 import { ResponseInterface } from '../../interfaces/response-interface'
-import { CsvTo2DArrayService } from './csv-to-2-d-array.service'
+import { DataTo2dArrayService } from './data-to-2d-array.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class KmeansLocalService {
-  csvData: string[][] = []
+  data: string[][] = []
   clusters: any[] = []
 
-  euclideanDistance (pointA: number[], pointB: number[]): number {
+  private euclideanDistance (pointA: number[], pointB: number[]): number {
     return Math.sqrt(pointA.reduce((sum, value, index) => sum + Math.pow(value - pointB[index], 2), 0))
   }
 
-  manhattanDistance (pointA: number[], pointB: number[]): number {
+  private manhattanDistance (pointA: number[], pointB: number[]): number {
     return pointA.reduce((sum, value, index) => sum + Math.abs(value - pointB[index]), 0)
   }
 
-  elbowMethod (data: number[][], maxClusters: number, distanceMetric: string): number {
+  private elbowMethod (data: number[][], maxClusters: number, distanceMetric: string): number {
     const ssd: number[] = [] // Sum of Squared Distances for different cluster numbers
 
     const distanceFunction = distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
@@ -45,45 +45,31 @@ export class KmeansLocalService {
     return elbowPoint + 2 // +2 because the index is 0-based and we started from k=1
   }
 
-  async performKMeans (csv: File, k: number, useOptK: boolean, distanceMetric: string): Promise<ResponseInterface> {
-    return await new Promise<ResponseInterface>((resolve, reject) => {
-      const fileReader = new FileReader()
+  async performKMeans (file: File, k: number, useOptK: boolean, distanceMetric: string, selectedIndices: number[]): Promise<ResponseInterface> {
+    this.data = await this.dataTo2DArrayService.dataTo2DArray(file)
+    this.data = this.data.map(row => { return selectedIndices.map(index => row[index]) })
+    this.data = this.data.filter(row => row.some(value => value !== undefined && value !== ''))
+    const dataAsNumbers = this.data.slice(1)
+      .map(row => row.map(value => parseFloat(value)))
+      .filter(row => row.length === this.data[1].length)
+    if (useOptK) {
+      k = this.elbowMethod(dataAsNumbers, 100, distanceMetric)
+    }
 
-      fileReader.onload = () => {
-        const content = fileReader.result as string
-        this.csvData = this.csvTo2DArrayService.csvTo2DArray(content)
-
-        const dataAsNumbers = this.csvData.slice(1)
-          .map(row => row.map(value => parseFloat(value)))
-          .filter(row => row.length === this.csvData[1].length)
-
-        if (useOptK) {
-          k = this.elbowMethod(dataAsNumbers, 100, distanceMetric)
-        }
-        const result = KMeans(dataAsNumbers, k, {
-          distanceFunction: distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
-        })
-
-        const jsonResult = this.convertToJSONFormat(result, dataAsNumbers, csv.name, distanceMetric)
-
-        resolve(jsonResult) // Resolviere das Promise mit dem Ergebnis
-      }
-
-      fileReader.onerror = (error) => {
-        reject(error) // Falls ein Fehler beim Lesen der Datei auftritt, rejecte das Promise
-      }
-
-      fileReader.readAsText(csv)
+    const result = KMeans(dataAsNumbers, k, {
+      distanceFunction: distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
     })
+
+    return this.convertToJSONFormat(result, dataAsNumbers, file.name, distanceMetric)
   }
 
-  convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string): ResponseInterface {
-    if (this.csvData.length === 0 || this.csvData[0].length < 2) {
+  private convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string): ResponseInterface {
+    if (this.data.length === 0 || this.data[0].length < 2) {
       console.error('Invalid CSV data format')
     }
 
-    const xLabel = this.csvData[0][0]
-    const yLabel = this.csvData[0][1]
+    const xLabel = this.data[0][0]
+    const yLabel = this.data[0][1]
 
     const clusters = result.centroids.map((centroid: number[], index: number) => {
       const points = data.filter((_, dataIndex) => result.clusters[dataIndex] === index)
@@ -115,5 +101,7 @@ export class KmeansLocalService {
     }
   }
 
-  constructor (private csvTo2DArrayService: CsvTo2DArrayService) { }
+  constructor (
+    private dataTo2DArrayService: DataTo2dArrayService
+  ) {}
 }

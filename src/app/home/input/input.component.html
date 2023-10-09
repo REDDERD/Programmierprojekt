@@ -34,9 +34,21 @@
 
 
           <div class="settings-grid">
+            <div>Spaltenauswahl</div>
+            <mat-form-field class="fixed-width-field"
+                            [class.has-error]="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')">
+              <mat-label>Spalten</mat-label>
+              <mat-select multiple formControlName="selectedColumns" [(value)]="selectedColumnsValue">
+                <mat-option *ngFor="let column of columnNames" [value]="column">{{column}} </mat-option>
+              </mat-select>
+              <mat-error *ngIf="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')">
+                Bitte genau 2 Spalten auswählen.
+              </mat-error>
+            </mat-form-field>
+
             <div>Anzahl der Cluster (optional)</div>
             <div>
-              <mat-form-field floatLabel="always">
+              <mat-form-field floatLabel="always" class="fixed-width-field">
                 <mat-label>k definieren (optional)</mat-label>
                 <input matInput type="number" formControlName="k" min="0">
                 <span matTextPrefix>k= </span>
@@ -49,7 +61,7 @@
               <mat-button-toggle-group name="distanceMethod" style="margin-top: -16px" formControlName="distanceMetric">
                 <mat-button-toggle value="EUCLIDEAN">Euklidisch (Standard)</mat-button-toggle>
                 <mat-button-toggle value="MANHATTAN">Manhattan</mat-button-toggle>
-                <mat-button-toggle value="JACCARDS">Jaccard</mat-button-toggle>
+                <mat-button-toggle value="JACCARDS" [disabled]="!!clusterInputFormGroup.value.offlineKmeans">Jaccard</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
             <div>
@@ -58,18 +70,17 @@
             <div>
               <mat-button-toggle-group name="kMethod" formControlName="clusterDetermination">
                 <mat-button-toggle value="ELBOW">Ellenbogen (Standard)</mat-button-toggle>
-                <mat-button-toggle value="SILHOUETTE">Silhouette</mat-button-toggle>
+                <mat-button-toggle value="SILHOUETTE" [disabled]="!!clusterInputFormGroup.value.offlineKmeans">Silhouette</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
             <div class="grid-over-two-columns">
-              <mat-slide-toggle name="localSelector" aria-label="execute locally" formControlName="offlineKmeans">Lokal im Browser ausführen</mat-slide-toggle>
-            </div>
+              <mat-slide-toggle name="localSelector" aria-label="execute locally" formControlName="offlineKmeans" (change)="onOfflineChange()">Lokal im Browser ausführen</mat-slide-toggle>            </div>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
 
 
-    <button mat-raised-button class="grid-over-two-columns" color="primary" disabled="{{ !file }}">K-Means durchführen</button>
+    <button mat-raised-button class="grid-over-two-columns" color="primary" [disabled]="!clusterInputFormGroup.valid || !file">K-Means durchführen</button>
   </form>
 </div>
