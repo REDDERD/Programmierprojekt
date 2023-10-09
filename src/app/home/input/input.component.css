@@ -59,3 +59,11 @@
   grid-template-columns: 35% 65%;
   grid-gap: 20px;
 }
+
+.fixed-width-field {
+  width: 250px;
+}
+
+mat-form-field.has-error {
+  margin-bottom: -15px;
+}
