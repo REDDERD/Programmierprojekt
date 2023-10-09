@@ -48,7 +48,7 @@ export class KmeansLocalService {
   private cleanClusteringData (dataAsNumbers: number[][]): number[][] {
     // Filter out all invalid arrays
     const filteredData = dataAsNumbers.filter(row => {
-      return row.every(value => typeof value === 'number' && !isNaN(value))
+      return row.every(value => !isNaN(value))
     })
     // Check if more than 25% of the arrays have been removed
     if (filteredData.length < dataAsNumbers.length * 0.75) {
