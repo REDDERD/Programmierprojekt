@@ -10,7 +10,6 @@ import { HomeComponent } from './home/home.component'
 import { InputComponent } from './home/input/input.component'
 import { ChartContainerComponent } from './home/chart-container/chart-container.component'
 import { ChartComponent } from './home/chart-container/chart/chart.component'
-import { LoginComponent } from './login/login.component'
 import { RouterModule, type Routes } from '@angular/router'
 import { MatInputModule } from '@angular/material/input'
 import { ReactiveFormsModule } from '@angular/forms'
@@ -26,8 +25,8 @@ import { MatTabsModule } from '@angular/material/tabs'
 import { MatTableModule } from '@angular/material/table'
 
 const routes: Routes = [{ path: 'home', component: HomeComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent }]
+  { path: '', redirectTo: '/home', pathMatch: 'full' }]
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +34,6 @@ const routes: Routes = [{ path: 'home', component: HomeComponent },
     InputComponent,
     ChartContainerComponent,
     ChartComponent,
-    LoginComponent,
     TableComponent
   ],
   imports: [
