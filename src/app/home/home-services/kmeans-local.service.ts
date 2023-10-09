@@ -45,13 +45,26 @@ export class KmeansLocalService {
     return elbowPoint + 2 // +2 because the index is 0-based and we started from k=1
   }
 
+  private cleanClusteringData (dataAsNumbers: number[][]): number[][] {
+    // Filter out all invalid arrays
+    const filteredData = dataAsNumbers.filter(row => {
+      return row.every(value => typeof value === 'number' && !isNaN(value))
+    })
+    // Check if more than 25% of the arrays have been removed
+    if (filteredData.length < dataAsNumbers.length * 0.75) {
+      throw new Error('Mehr als 25% der Daten sind ungültig.')
+    }
+    return filteredData
+  }
+
   async performKMeans (file: File, k: number, useOptK: boolean, distanceMetric: string, selectedIndices: number[]): Promise<ResponseInterface> {
     this.data = await this.dataTo2DArrayService.dataTo2DArray(file)
     this.data = this.data.map(row => { return selectedIndices.map(index => row[index]) })
     this.data = this.data.filter(row => row.some(value => value !== undefined && value !== ''))
-    const dataAsNumbers = this.data.slice(1)
+    let dataAsNumbers = this.data.slice(1)
       .map(row => row.map(value => parseFloat(value)))
       .filter(row => row.length === this.data[1].length)
+    dataAsNumbers = this.cleanClusteringData(dataAsNumbers)
     if (useOptK) {
       k = this.elbowMethod(dataAsNumbers, 100, distanceMetric)
     }
