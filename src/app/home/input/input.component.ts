@@ -16,7 +16,7 @@ export class InputComponent {
     clusterName: new FormControl(''),
     k: new FormControl(''),
     distanceMetric: new FormControl('EUCLIDEAN'),
-    clusterDetermination: new FormControl('ELBOW'),
+    clusterDetermination: new FormControl('SILHOUETTE'),
     offlineKmeans: new FormControl(false),
     selectedColumns: new FormControl<number[]>([], [this.twoColumnsSelectedValidator()])
   })
@@ -30,6 +30,10 @@ export class InputComponent {
     private localKmeans: KmeansLocalService,
     private dataTo2DArrayService: DataTo2dArrayService
   ) {
+    // Höre auf Änderungen im 'k' Feld
+    this.clusterInputFormGroup.get('k')?.valueChanges.subscribe(() => {
+      this.updateClusterDetermination()
+    })
   }
 
   public file?: File
@@ -49,8 +53,9 @@ export class InputComponent {
             this.kmeansResult.emit(result)
             this.isLoading.emit(false)
           }).catch((error) => {
-            console.log(error)
             this.isLoading.emit(false)
+            this.snackbar.open('Ein Fehler ist aufgetreten: ' + error.message, 'Okay')
+            console.log(error)
           })
       }
     } else {
@@ -92,7 +97,8 @@ export class InputComponent {
   }
 
   private onFileChange (file: File): void {
-    if (file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+    const fileExtension = file.name.split('.').pop()?.toLowerCase()
+    if (fileExtension === 'csv' || fileExtension === 'xlsx') {
       this.file = file
       this.snackbar.open('Datei ' + file.name + ' wird hochgeladen', 'Okay', { duration: 2000 })
 
@@ -141,17 +147,21 @@ export class InputComponent {
     return this.selectedColumnsValue.map(name => this.columnNames.indexOf(name))
   }
 
-  onOfflineChange (): void {
-    const isOffline = this.clusterInputFormGroup.value.offlineKmeans
-    const distanceMetricControl = this.clusterInputFormGroup.get('distanceMetric')
-    const kDeterminationMethodControl = this.clusterInputFormGroup.get('clusterDetermination')
+  hasKValue (): boolean {
+    const kValue = this.clusterInputFormGroup.get('k')?.value
+    return kValue !== ''
+  }
 
-    if (isOffline === true) {
-      if (distanceMetricControl?.value === 'JACCARDS') {
-        distanceMetricControl.setValue('EUCLIDEAN')
-      }
-      if (kDeterminationMethodControl?.value === 'SILHOUETTE') {
-        kDeterminationMethodControl.setValue('ELBOW')
+  updateClusterDetermination (): void {
+    const kValue = this.clusterInputFormGroup.get('k')?.value
+    if (kValue !== null && kValue !== undefined && kValue.toString().trim() !== '') {
+      this.clusterInputFormGroup.get('clusterDetermination')?.setValue(null)
+    } else {
+      const isOffline = this.clusterInputFormGroup.get('offlineKmeans')?.value
+      if (isOffline === true) {
+        this.clusterInputFormGroup.get('clusterDetermination')?.setValue('ELBOW')
+      } else {
+        this.clusterInputFormGroup.get('clusterDetermination')?.setValue('SILHOUETTE')
       }
     }
   }
