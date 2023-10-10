@@ -7,9 +7,7 @@ export interface ResponseInterface {
   'y_label': string
   'iterations': number
   'used_distance_metric': string
-  'used_optK_method': string
-  'clusters_elbow': number
-  'clusters_silhouette': number
+  'k_value': number
 }
 
 export interface Cluster {

@@ -15,6 +15,11 @@ export class ApiService {
     clusterDetermination?: string
   ): Observable<any> {
     let Params: HttpParams = new HttpParams()
+    let url = 'https://beta.axellotl.de/advanced/perform-advanced-2d-kmeans/'
+
+    if (kCluster !== 0) {
+      url = 'https://beta.axellotl.de/basic/perform-2d-kmeans/'
+    }
 
     if (column1 != null) {
       Params = Params.set('column1', column1)
@@ -36,7 +41,7 @@ export class ApiService {
     formData.append('file', new Blob([csv], { type: 'text/csv' }), csv.name)
 
     return this.http.post(
-      'https://beta.axellotl.de/clustering/perform-kmeans-clustering/',
+      url,
       formData,
       { params: Params }
     )
