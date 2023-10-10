@@ -13,7 +13,6 @@ import { DataTo2dArrayService } from '../home-services/data-to-2d-array.service'
 })
 export class InputComponent {
   clusterInputFormGroup = new FormGroup({
-    clusterName: new FormControl(''),
     k: new FormControl(''),
     distanceMetric: new FormControl('EUCLIDEAN'),
     clusterDetermination: new FormControl('SILHOUETTE'),
