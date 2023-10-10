@@ -61,7 +61,6 @@
               <mat-button-toggle-group name="distanceMethod" style="margin-top: -16px" formControlName="distanceMetric">
                 <mat-button-toggle value="EUCLIDEAN">Euklidisch (Standard)</mat-button-toggle>
                 <mat-button-toggle value="MANHATTAN">Manhattan</mat-button-toggle>
-                <mat-button-toggle value="JACCARDS" [disabled]="!!clusterInputFormGroup.value.offlineKmeans">Jaccard</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
             <div>
@@ -69,12 +68,12 @@
             </div>
             <div>
               <mat-button-toggle-group name="kMethod" formControlName="clusterDetermination">
-                <mat-button-toggle value="ELBOW">Ellenbogen (Standard)</mat-button-toggle>
-                <mat-button-toggle value="SILHOUETTE" [disabled]="!!clusterInputFormGroup.value.offlineKmeans">Silhouette</mat-button-toggle>
+                <mat-button-toggle value="ELBOW" [disabled]="hasKValue() || !clusterInputFormGroup.value.offlineKmeans">Ellenbogen</mat-button-toggle>
+                <mat-button-toggle value="SILHOUETTE" [disabled]="hasKValue() || !!clusterInputFormGroup.value.offlineKmeans">Silhouette</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
             <div class="grid-over-two-columns">
-              <mat-slide-toggle name="localSelector" aria-label="execute locally" formControlName="offlineKmeans" (change)="onOfflineChange()">Lokal im Browser ausführen</mat-slide-toggle>            </div>
+              <mat-slide-toggle name="localSelector" aria-label="execute locally" formControlName="offlineKmeans" (change)="updateClusterDetermination()">Lokal im Browser ausführen</mat-slide-toggle>            </div>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
