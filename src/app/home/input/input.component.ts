@@ -13,12 +13,11 @@ import { DataTo2dArrayService } from '../home-services/data-to-2d-array.service'
 })
 export class InputComponent {
   clusterInputFormGroup = new FormGroup({
-    clusterName: new FormControl(''),
     k: new FormControl(''),
     distanceMetric: new FormControl('EUCLIDEAN'),
     clusterDetermination: new FormControl('SILHOUETTE'),
     offlineKmeans: new FormControl(false),
-    selectedColumns: new FormControl<number[]>([], [this.twoColumnsSelectedValidator()])
+    selectedColumns: new FormControl<string[]>([], [this.twoColumnsSelectedValidator()])
   })
 
   @Output() kmeansResult: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
@@ -59,7 +58,10 @@ export class InputComponent {
           })
       }
     } else {
-      if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.clusterDetermination != null)) {
+      if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null)) {
+        if (this.clusterInputFormGroup.value.clusterDetermination == null) {
+          this.clusterInputFormGroup.value.clusterDetermination = undefined
+        }
         this.isLoading.emit(true)
         this.apiService.postKmeans(
           this.file,
@@ -104,12 +106,13 @@ export class InputComponent {
 
       this.dataTo2DArrayService.dataTo2DArray(file).then(data => {
         // Spaltennamen (Header) extrahieren
-        if (data !== null && data !== undefined && data.length > 0) {
+        if (data !== null && data !== undefined && data.length > 1) {
           this.columnNames = data[0]
+          // Setzen Sie die ersten beiden Spalten als standardmäßig ausgewählt
+          this.clusterInputFormGroup.get('selectedColumns')?.setValue([this.columnNames[0], this.columnNames[1]])
         }
-        this.clusterInputFormGroup.get('selectedColumns')?.setValue([])
       }).catch(error => {
-        this.snackbar.open('Fehler beim Lesen der Datei', 'Okay', { duration: 3000 })
+        this.snackbar.open('Daten fehlerhaft.', 'Okay', { duration: 3000 })
         console.error(error)
       })
     } else {
@@ -129,22 +132,15 @@ export class InputComponent {
   }
 
   get selectedColumnsValue (): string[] {
-    const value = this.clusterInputFormGroup.get('selectedColumns')?.value
-    if (value === null || value === undefined || value.length === 0) {
-      if (Array.isArray(this.columnNames) && this.columnNames.length > 1) {
-        return [this.columnNames[0], this.columnNames[1]]
-      }
-      return []
-    }
-    return value.map((val: number) => val.toString())
-  }
-
-  set selectedColumnsValue (value: number[] | null) {
-    this.clusterInputFormGroup.get('selectedColumns')?.setValue(value)
+    return this.clusterInputFormGroup.get('selectedColumns')?.value ?? []
   }
 
   get selectedColumnsIndices (): number[] {
     return this.selectedColumnsValue.map(name => this.columnNames.indexOf(name))
+  }
+
+  isFileUploaded (): boolean {
+    return this.file !== null && this.file !== undefined
   }
 
   hasKValue (): boolean {

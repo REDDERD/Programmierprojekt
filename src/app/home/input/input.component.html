@@ -1,10 +1,6 @@
 <div class="center-contents">
   <form class="form-container" [formGroup]="clusterInputFormGroup" (ngSubmit)="submit()">
-    <h1 class="grid-over-two-columns">Clustering</h1>
-    <mat-form-field class="grid-over-two-columns">
-      <mat-label>Name des Clusters</mat-label>
-      <input matInput placeholder="Vorgang XY" formControlName="clusterName">
-    </mat-form-field>
+    <h1 class="grid-over-two-columns">K-Means durchführen</h1>
 
     <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
       <input type="file" style="display: none" (change)="onChange($event)" #fileUpload >
@@ -27,7 +23,7 @@
 
     <div class="grid-over-two-columns" style="margin-bottom: 22px;">
       <mat-accordion>
-        <mat-expansion-panel>
+        <mat-expansion-panel [disabled]="!isFileUploaded()">
           <mat-expansion-panel-header>
             <mat-panel-title>Experteneinstellungen</mat-panel-title>
           </mat-expansion-panel-header>
@@ -38,7 +34,7 @@
             <mat-form-field class="fixed-width-field"
                             [class.has-error]="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')">
               <mat-label>Spalten</mat-label>
-              <mat-select multiple formControlName="selectedColumns" [(value)]="selectedColumnsValue">
+              <mat-select multiple formControlName="selectedColumns">
                 <mat-option *ngFor="let column of columnNames" [value]="column">{{column}} </mat-option>
               </mat-select>
               <mat-error *ngIf="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')">
