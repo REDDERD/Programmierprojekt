@@ -18,7 +18,7 @@ export class InputComponent {
     distanceMetric: new FormControl('EUCLIDEAN'),
     clusterDetermination: new FormControl('SILHOUETTE'),
     offlineKmeans: new FormControl(false),
-    selectedColumns: new FormControl<number[]>([], [this.twoColumnsSelectedValidator()])
+    selectedColumns: new FormControl<string[]>([], [this.twoColumnsSelectedValidator()])
   })
 
   @Output() kmeansResult: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
@@ -104,10 +104,11 @@ export class InputComponent {
 
       this.dataTo2DArrayService.dataTo2DArray(file).then(data => {
         // Spaltennamen (Header) extrahieren
-        if (data !== null && data !== undefined && data.length > 0) {
+        if (data !== null && data !== undefined && data.length > 1) {
           this.columnNames = data[0]
+          // Setzen Sie die ersten beiden Spalten als standardmäßig ausgewählt
+          this.clusterInputFormGroup.get('selectedColumns')?.setValue([this.columnNames[0], this.columnNames[1]])
         }
-        this.clusterInputFormGroup.get('selectedColumns')?.setValue([])
       }).catch(error => {
         this.snackbar.open('Fehler beim Lesen der Datei', 'Okay', { duration: 3000 })
         console.error(error)
@@ -136,11 +137,8 @@ export class InputComponent {
       }
       return []
     }
-    return value.map((val: number) => val.toString())
-  }
-
-  set selectedColumnsValue (value: number[] | null) {
-    this.clusterInputFormGroup.get('selectedColumns')?.setValue(value)
+    // return value.map((val: number) => val.toString())
+    return value
   }
 
   get selectedColumnsIndices (): number[] {
