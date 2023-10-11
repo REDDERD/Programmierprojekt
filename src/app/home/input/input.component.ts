@@ -110,7 +110,7 @@ export class InputComponent {
           this.clusterInputFormGroup.get('selectedColumns')?.setValue([this.columnNames[0], this.columnNames[1]])
         }
       }).catch(error => {
-        this.snackbar.open('Fehler beim Lesen der Datei', 'Okay', { duration: 3000 })
+        this.snackbar.open('Daten fehlerhaft.', 'Okay', { duration: 3000 })
         console.error(error)
       })
     } else {
@@ -130,15 +130,7 @@ export class InputComponent {
   }
 
   get selectedColumnsValue (): string[] {
-    const value = this.clusterInputFormGroup.get('selectedColumns')?.value
-    if (value === null || value === undefined || value.length === 0) {
-      if (Array.isArray(this.columnNames) && this.columnNames.length > 1) {
-        return [this.columnNames[0], this.columnNames[1]]
-      }
-      return []
-    }
-    // return value.map((val: number) => val.toString())
-    return value
+    return this.clusterInputFormGroup.get('selectedColumns')?.value ?? []
   }
 
   get selectedColumnsIndices (): number[] {
