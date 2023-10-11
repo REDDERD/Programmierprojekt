@@ -1,10 +1,6 @@
 <div class="center-contents">
   <form class="form-container" [formGroup]="clusterInputFormGroup" (ngSubmit)="submit()">
-    <h1 class="grid-over-two-columns">Clustering</h1>
-    <mat-form-field class="grid-over-two-columns">
-      <mat-label>Name des Clusters</mat-label>
-      <input matInput placeholder="Vorgang XY" formControlName="clusterName">
-    </mat-form-field>
+    <h1 class="grid-over-two-columns">K-Means durchführen</h1>
 
     <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
       <input type="file" style="display: none" (change)="onChange($event)" #fileUpload >

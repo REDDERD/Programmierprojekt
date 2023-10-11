@@ -13,7 +13,6 @@ import { DataTo2dArrayService } from '../home-services/data-to-2d-array.service'
 })
 export class InputComponent {
   clusterInputFormGroup = new FormGroup({
-    clusterName: new FormControl(''),
     k: new FormControl(''),
     distanceMetric: new FormControl('EUCLIDEAN'),
     clusterDetermination: new FormControl('SILHOUETTE'),
@@ -159,7 +158,7 @@ export class InputComponent {
   updateClusterDetermination (): void {
     const kValue = this.clusterInputFormGroup.get('k')?.value
     if (kValue !== null && kValue !== undefined && kValue.toString().trim() !== '') {
-      this.clusterInputFormGroup.get('clusterDetermination')?.setValue(null)
+      this.clusterInputFormGroup.value.clusterDetermination = undefined
     } else {
       const isOffline = this.clusterInputFormGroup.get('offlineKmeans')?.value
       if (isOffline === true) {
