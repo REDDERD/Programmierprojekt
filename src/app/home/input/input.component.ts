@@ -58,7 +58,10 @@ export class InputComponent {
           })
       }
     } else {
-      if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.clusterDetermination != null)) {
+      if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null)) {
+        if (this.clusterInputFormGroup.value.clusterDetermination == null) {
+          this.clusterInputFormGroup.value.clusterDetermination = undefined
+        }
         this.isLoading.emit(true)
         this.apiService.postKmeans(
           this.file,
@@ -148,7 +151,7 @@ export class InputComponent {
   updateClusterDetermination (): void {
     const kValue = this.clusterInputFormGroup.get('k')?.value
     if (kValue !== null && kValue !== undefined && kValue.toString().trim() !== '') {
-      this.clusterInputFormGroup.value.clusterDetermination = undefined
+      this.clusterInputFormGroup.get('clusterDetermination')?.setValue(null)
     } else {
       const isOffline = this.clusterInputFormGroup.get('offlineKmeans')?.value
       if (isOffline === true) {
