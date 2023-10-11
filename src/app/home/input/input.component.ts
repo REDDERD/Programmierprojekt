@@ -147,6 +147,10 @@ export class InputComponent {
     return this.selectedColumnsValue.map(name => this.columnNames.indexOf(name))
   }
 
+  isFileUploaded (): boolean {
+    return this.file !== null && this.file !== undefined
+  }
+
   hasKValue (): boolean {
     const kValue = this.clusterInputFormGroup.get('k')?.value
     return kValue !== ''
