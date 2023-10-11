@@ -71,6 +71,6 @@ mat-drawer {
   background-color: rgba(106, 106, 106, 0.5);
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  height: 120vh;
   z-index: 9;
 }

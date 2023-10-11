@@ -10,7 +10,5 @@ export const MockDaten: ResponseInterface = {
   y_label: '',
   iterations: 4,
   used_distance_metric: 'EUCLIDEAN',
-  used_optK_method: 'ELBOW',
-  clusters_elbow: 21,
-  clusters_silhouette: 2
+  k_value: 4
 }

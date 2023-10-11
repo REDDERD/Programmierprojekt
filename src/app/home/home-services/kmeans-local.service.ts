@@ -108,9 +108,7 @@ export class KmeansLocalService {
       y_label: yLabel,
       iterations: result.iterations,
       used_distance_metric: distanceMetric,
-      used_optK_method: 'deine Mutter',
-      clusters_elbow: 0,
-      clusters_silhouette: 0
+      k_value: 1
     }
   }
 
