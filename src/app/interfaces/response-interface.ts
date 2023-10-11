@@ -1,3 +1,4 @@
+// Interface für die Antwort vom Backend
 export interface ResponseInterface {
   'user_id': number
   'request_id': number

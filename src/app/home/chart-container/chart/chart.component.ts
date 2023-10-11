@@ -2,7 +2,7 @@ import { type AfterViewInit, Component, Input, type OnChanges, type SimpleChange
 import { Chart } from 'chart.js/auto'
 import { type Points, type ResponseInterface } from '../../../interfaces/response-interface'
 import { type CentroidDatesetInterface, type ChartDatasetInterface } from '../../../interfaces/chartDataset-interface'
-import { MockDaten } from './mock-daten'
+import { EmptyChart } from './empty-chart'
 
 @Component({
   selector: 'app-chart',
@@ -11,14 +11,16 @@ import { MockDaten } from './mock-daten'
 })
 export class ChartComponent implements AfterViewInit, OnChanges {
   public chart: any
-  chartData: ResponseInterface = MockDaten
+  chartData: ResponseInterface = EmptyChart
   datasets: ChartDatasetInterface[] = []
   @Input() kmeansResult: ResponseInterface | undefined
 
+  // Initiales Rendern eines leeren Graphen
   ngAfterViewInit (): void {
     this.renderChart()
   }
 
+  // Immer wenn ein neues K-Means Ergebnis in die Komponente kommt, soll er den alten Graphen entfernen und einen neuen mit den neuen Daten rendern
   ngOnChanges (changes: SimpleChanges): void {
     if (changes['kmeansResult'].currentValue !== undefined) {
       if (this.kmeansResult != null) {
@@ -30,6 +32,7 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  // Aufbereiten des Aufbaus des Ergebnisses in die Form, die ChartJS zur darstellung benötigt
   generateDatasets (): void {
     const centroids: Points[] = []
     const clusterArray: ChartDatasetInterface[] = []
@@ -55,6 +58,7 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     })
   }
 
+  // Tatsächliches Rendern des Graphen auf das canvas Element in der html Datei
   renderChart (): void {
     this.generateDatasets()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

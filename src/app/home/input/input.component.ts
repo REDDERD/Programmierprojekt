@@ -12,6 +12,7 @@ import { DataTo2dArrayService } from '../home-services/data-to-2d-array.service'
   styleUrls: ['./input.component.css']
 })
 export class InputComponent {
+  // FormGroup als Teil einer Reactive Form für die Abfrage der Inputs
   clusterInputFormGroup = new FormGroup({
     clusterName: new FormControl(''),
     k: new FormControl(''),
@@ -21,6 +22,7 @@ export class InputComponent {
     selectedColumns: new FormControl<number[]>([], [this.twoColumnsSelectedValidator()])
   })
 
+  // Weiterleitung der API Response und des Loading Indicator Booleans an die nächst höhere Komponente
   @Output() kmeansResult: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter<boolean>()
 
@@ -39,7 +41,9 @@ export class InputComponent {
   public file?: File
   public columnNames: string[] = []
 
+  // Ausgelöst vom "K-Means durchführen" button und entweder auslösen des HTTP-Request ans Backend oder Starten der lokalen Berechnung
   submit (): void {
+    // Lokale Ausführung
     if (this.clusterInputFormGroup.value.offlineKmeans === true) {
       if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null)) {
         this.isLoading.emit(true)
@@ -58,6 +62,7 @@ export class InputComponent {
             console.log(error)
           })
       }
+    // Ausführung über das Backend
     } else {
       if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null) && (this.clusterInputFormGroup.value.clusterDetermination != null)) {
         this.isLoading.emit(true)
@@ -82,20 +87,24 @@ export class InputComponent {
     }
   }
 
+  // Teil des File-Uploads
   onDragOver (event: any): void {
     event.preventDefault()
   }
 
+  // Teil des File-Uploads
   onDropSuccess (event: any): void {
     event.preventDefault()
 
     this.onFileChange(event.dataTransfer.files[0]) // notice the "dataTransfer" used instead of "target"
   }
 
+  // Teil des File-Uploads
   onChange (event: any): void {
     this.onFileChange(event.target.files[0])
   }
 
+  // Wird ausgeführt nachdem eine Datei hochgeladen wurde
   private onFileChange (file: File): void {
     const fileExtension = file.name.split('.').pop()?.toLowerCase()
     if (fileExtension === 'csv' || fileExtension === 'xlsx') {
@@ -117,6 +126,7 @@ export class InputComponent {
     }
   }
 
+  // Valdator, dass bei der Spaltenauswahl immer 2 Spalten ausgewählt sind
   twoColumnsSelectedValidator (): ValidatorFn {
     return (control: AbstractControl): Record<string, any> | null => {
       const selected = control.value

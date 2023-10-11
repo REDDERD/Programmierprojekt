@@ -1,6 +1,6 @@
 import { type ResponseInterface } from '../../../interfaces/response-interface'
 
-export const MockDaten: ResponseInterface = {
+export const EmptyChart: ResponseInterface = {
   user_id: 0,
   request_id: 0,
   name: 'Kein anzeigbares Clustering',

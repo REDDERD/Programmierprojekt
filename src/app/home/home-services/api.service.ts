@@ -6,6 +6,7 @@ import { Observable } from 'rxjs'
   providedIn: 'root'
 })
 export class ApiService {
+  // Post Request zur Durchführung von K-Means über das Backend
   public postKmeans (
     csv: File,
     column1?: number,

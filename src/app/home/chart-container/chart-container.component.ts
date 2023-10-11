@@ -7,5 +7,6 @@ import { type ResponseInterface } from '../../interfaces/response-interface'
   styleUrls: ['./chart-container.component.css']
 })
 export class ChartContainerComponent {
+  // Weiterleitung des K-Means Ergebnisses an die Chart Komponente
   @Input() kmeansResult: ResponseInterface | undefined
 }
