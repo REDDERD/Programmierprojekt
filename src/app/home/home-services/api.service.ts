@@ -28,7 +28,7 @@ export class ApiService {
       Params = Params.set('column2', column2)
     }
     if ((kCluster != null) && kCluster > 0) {
-      Params = Params.set('kCluster', kCluster)
+      Params = Params.set('k_clusters', kCluster)
     }
     if (distanceMetric != null) {
       Params = Params.set('distanceMetric', distanceMetric)
