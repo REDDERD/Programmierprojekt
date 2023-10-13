@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { InputComponent } from './home/input/input.component'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatIconModule } from '@angular/material/icon'
+import { RouterModule } from '@angular/router'
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -20,7 +21,8 @@ describe('AppComponent', () => {
       MatSidenavModule,
       BrowserAnimationsModule,
       MatFormFieldModule,
-      MatIconModule
+      MatIconModule,
+      RouterModule
     ]
   }))
 
@@ -33,13 +35,13 @@ describe('AppComponent', () => {
   it('should have as title \'Programmierprojekt\'', () => {
     const fixture = TestBed.createComponent(AppComponent)
     const app = fixture.componentInstance
-    expect(app.title).toEqual('Dave is n Wadenbeißer')
+    expect(app.title).toEqual('Programmierprojekt')
   })
 
-  it('should render title', () => {
+  it('should have router-outlet', () => {
     const fixture = TestBed.createComponent(AppComponent)
     fixture.detectChanges()
     const compiled = fixture.nativeElement as HTMLElement
-    expect(compiled.querySelector('.content span')?.textContent).toContain('Programmierprojekt app is running!')
+    expect(compiled.querySelector('router-outlet')).toBeTruthy()
   })
 })
