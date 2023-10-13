@@ -22,8 +22,12 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "chart.js": "^4.4.0",
+    "ml-array-mean": "^1.1.6",
+    "ml-array-standard-deviation": "^1.1.8",
     "ml-kmeans": "^6.0.0",
+    "ml-pca": "^4.1.1",
     "node-xlsx": "^0.23.0",
+    "pandas-js": "^0.2.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
