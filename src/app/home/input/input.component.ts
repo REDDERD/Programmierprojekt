@@ -1,17 +1,18 @@
-import { Component, EventEmitter, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core'
 import { FormControl, FormGroup, ValidatorFn, AbstractControl } from '@angular/forms'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { ApiService } from '../home-services/api.service'
 import { ResponseInterface } from '../../interfaces/response-interface'
 import { KmeansLocalService } from '../home-services/kmeans-local.service'
 import { DataTo2dArrayService } from '../home-services/data-to-2d-array.service'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.css']
 })
-export class InputComponent {
+export class InputComponent implements OnChanges {
   clusterInputFormGroup = new FormGroup({
     k: new FormControl(''),
     distanceMetric: new FormControl('EUCLIDEAN'),
@@ -22,6 +23,11 @@ export class InputComponent {
 
   @Output() kmeansResult: EventEmitter<ResponseInterface> = new EventEmitter<ResponseInterface>()
   @Output() isLoading: EventEmitter<boolean> = new EventEmitter<boolean>()
+  @Output() localCalculation: EventEmitter<boolean> = new EventEmitter<boolean>()
+  @Input() triggerCancelCalculation: boolean = false
+  activeSubscription: Subscription | undefined
+  public file?: File
+  public columnNames: string[] = []
 
   constructor (
     private snackbar: MatSnackBar,
@@ -35,29 +41,47 @@ export class InputComponent {
     })
   }
 
-  public file?: File
-  public columnNames: string[] = []
+  // Listens for triggerCancelCalculation to stop waiting for Backend
+  ngOnChanges (changes: SimpleChanges): void {
+    for (const propName in changes) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'triggerCancelCalculation': {
+            if (this.activeSubscription !== undefined) {
+              this.activeSubscription.unsubscribe()
+            }
+            this.isLoading.emit(false)
+          }
+        }
+      }
+    }
+  }
 
   submit (): void {
     if (this.clusterInputFormGroup.value.offlineKmeans === true) {
-      if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null)) {
-        this.isLoading.emit(true)
-        this.localKmeans.performKMeans(
-          this.file,
-          Number(this.clusterInputFormGroup.value.k) !== 0 ? Number(this.clusterInputFormGroup.value.k) : 0,
-          Number(this.clusterInputFormGroup.value.k) === 0,
-          this.clusterInputFormGroup.value.distanceMetric,
-          this.selectedColumnsIndices)
-          .then((result) => {
-            this.kmeansResult.emit(result)
-            this.isLoading.emit(false)
-          }).catch((error) => {
-            this.isLoading.emit(false)
-            this.snackbar.open('Ein Fehler ist aufgetreten: ' + error.message, 'Okay')
-            console.log(error)
-          })
-      }
+      this.localCalculation.emit(true)
+      this.isLoading.emit(true)
+      setTimeout(() => {
+        if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null)) {
+          this.localKmeans.performKMeans(
+            this.file,
+            Number(this.clusterInputFormGroup.value.k) !== 0 ? Number(this.clusterInputFormGroup.value.k) : 0,
+            Number(this.clusterInputFormGroup.value.k) === 0,
+            this.clusterInputFormGroup.value.distanceMetric,
+            this.selectedColumnsIndices)
+            .then((result) => {
+              this.kmeansResult.emit(result)
+              this.isLoading.emit(false)
+            }).catch((error) => {
+              this.isLoading.emit(false)
+              this.snackbar.open('Ein Fehler ist aufgetreten: ' + error.message, 'Okay')
+              console.log(error)
+            })
+        }
+      }, 500)
     } else {
+      this.localCalculation.emit(false)
       if ((this.file != null) && (this.clusterInputFormGroup.value.distanceMetric != null)) {
         if (this.clusterInputFormGroup.value.clusterDetermination == null) {
           this.clusterInputFormGroup.value.clusterDetermination = undefined
@@ -66,7 +90,7 @@ export class InputComponent {
         const clusterDetermination = this.clusterInputFormGroup.value.clusterDetermination
         this.isLoading.emit(true)
         this.filterFileColumns().then(filteredFile => {
-          this.apiService.postKmeans(
+          this.activeSubscription = this.apiService.postKmeans(
             filteredFile,
             undefined,
             undefined,

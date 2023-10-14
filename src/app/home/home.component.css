@@ -81,6 +81,12 @@ mat-drawer {
   z-index: 9;
 }
 
+.cancel-button {
+  transform: translateY(50px) translateX(-7px) scale(0.5);
+  z-index: 12;
+}
+
+/*Loading Indicator*/
 .lds-ellipsis {
   display: inline-block;
   position: absolute;
