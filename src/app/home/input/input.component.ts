@@ -62,22 +62,30 @@ export class InputComponent {
         if (this.clusterInputFormGroup.value.clusterDetermination == null) {
           this.clusterInputFormGroup.value.clusterDetermination = undefined
         }
+        const distanceMetric: string = this.clusterInputFormGroup.value.distanceMetric
+        const clusterDetermination = this.clusterInputFormGroup.value.clusterDetermination
         this.isLoading.emit(true)
-        this.apiService.postKmeans(
-          this.file,
-          this.selectedColumnsIndices[0],
-          this.selectedColumnsIndices[1],
-          Number(this.clusterInputFormGroup.value.k),
-          this.clusterInputFormGroup.value.distanceMetric,
-          this.clusterInputFormGroup.value.clusterDetermination
-        ).subscribe((response: ResponseInterface) => {
-          this.kmeansResult.emit(response)
-          this.isLoading.emit(false)
-        }, error => {
-          this.isLoading.emit(false)
-          this.snackbar.open('Ein Fehler ist aufgetreten. Meldung: ' + error.error.detail, 'Okay')
-          console.log(error)
+        this.filterFileColumns().then(filteredFile => {
+          this.apiService.postKmeans(
+            filteredFile,
+            undefined,
+            undefined,
+            Number(this.clusterInputFormGroup.value.k),
+            distanceMetric,
+            clusterDetermination,
+            this.selectedColumnsIndices.length >= 3
+          ).subscribe((response: ResponseInterface) => {
+            this.kmeansResult.emit(response)
+            this.isLoading.emit(false)
+          }, error => {
+            this.isLoading.emit(false)
+            this.snackbar.open('Ein Fehler ist aufgetreten. Meldung: ' + error.error.detail, 'Okay')
+            console.log(error)
+          })
         })
+          .catch(error => {
+            this.snackbar.open('Ein Fehler ist aufgetreten. Meldung: ' + error, 'Okay')
+          })
       } else {
         this.snackbar.open('Bitte lade erst eine Datei hoch', 'Okay', { duration: 3000 })
       }
@@ -160,5 +168,18 @@ export class InputComponent {
         this.clusterInputFormGroup.get('clusterDetermination')?.setValue('SILHOUETTE')
       }
     }
+  }
+
+  async filterFileColumns (): Promise<File> {
+    if (this.file === null || this.file === undefined) {
+      throw new Error('File is not set.')
+    }
+    const data = await this.dataTo2DArrayService.dataTo2DArray(this.file)
+    const filteredData = data.map(row => {
+      return this.selectedColumnsIndices.map(index => row[index])
+    })
+    const filteredContent = filteredData.map(row => row.join(',')).join('\n')
+    const blob = new Blob([filteredContent], { type: 'text/csv' })
+    return new File([blob], this.file.name, { type: 'text/csv' })
   }
 }
