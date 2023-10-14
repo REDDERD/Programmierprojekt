@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from '@angular/core'
 import { ResponseInterface } from '../../../interfaces/response-interface'
-import { MockDaten } from '../chart/mock-daten'
+import { EmptyChart } from '../chart/empty-chart'
 import { FlatTreeControl } from '@angular/cdk/tree'
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 import { FlatTableDataset, TableDatasetInterface } from '../../../interfaces/tableDataset-interface'
@@ -12,7 +12,7 @@ import { FlatTableDataset, TableDatasetInterface } from '../../../interfaces/tab
 })
 export class TableComponent implements AfterViewInit, OnChanges {
   @Input() kmeansResult: ResponseInterface | undefined
-  tableDataRaw: ResponseInterface = MockDaten
+  tableDataRaw: ResponseInterface = EmptyChart
   tableData: TableDatasetInterface[] = []
 
   displayedColumns: string[] = ['name', 'x', 'y']

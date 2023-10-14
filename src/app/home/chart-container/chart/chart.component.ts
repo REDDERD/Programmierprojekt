@@ -2,7 +2,7 @@ import { type AfterViewInit, Component, Input, type OnChanges, type SimpleChange
 import { Chart } from 'chart.js/auto'
 import { type Points, type ResponseInterface } from '../../../interfaces/response-interface'
 import { type CentroidDatesetInterface, type ChartDatasetInterface } from '../../../interfaces/chartDataset-interface'
-import { MockDaten } from './mock-daten'
+import { EmptyChart } from './empty-chart'
 
 @Component({
   selector: 'app-chart',
@@ -11,7 +11,7 @@ import { MockDaten } from './mock-daten'
 })
 export class ChartComponent implements AfterViewInit, OnChanges {
   public chart: any
-  chartData: ResponseInterface = MockDaten
+  chartData: ResponseInterface = EmptyChart
   datasets: ChartDatasetInterface[] = []
   @Input() kmeansResult: ResponseInterface | undefined
   @Input() selectedTabIndex: number = 0
