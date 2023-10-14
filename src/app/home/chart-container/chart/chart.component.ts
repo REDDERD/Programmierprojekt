@@ -23,7 +23,7 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     })
   }
 
-  // Rerenders Chart if new Data is assigned to this.kmeansResult
+  // Re-renders chart if new Data is assigned to this.kmeansResult
   ngOnChanges (changes: SimpleChanges): void {
     for (const propName in changes) {
       // eslint-disable-next-line no-prototype-builtins
