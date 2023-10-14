@@ -48,14 +48,14 @@ export class KmeansLocalService {
     return elbowPoint + 2 // +2 because the index is 0-based and we started from k=1
   }
 
-  private cleanClusteringData (dataAsNumbers: number[][]): number[][] {
+  private removeNaN (dataAsNumbers: number[][]): number[][] {
     // Filter out all invalid arrays
     const filteredData = dataAsNumbers.filter(row => {
       return row.every(value => !isNaN(value))
     })
     // Check if more than 25% of the arrays have been removed
     if (filteredData.length < dataAsNumbers.length * 0.75) {
-      throw new Error('Mehr als 25% der Daten sind ungültig.')
+      throw new Error('Error processing file.')
     }
     return filteredData
   }
@@ -79,9 +79,7 @@ export class KmeansLocalService {
   private oneHotEncode (data: string[][]): number[][] {
     const headers = data[0]
     const rows = data.slice(1)
-
     const isNumeric = (value: string): boolean => !isNaN(Number(value))
-
     const uniqueValuesPerColumn = new Map<number, string[]>()
 
     headers.forEach((_, colIndex) => {
@@ -115,13 +113,8 @@ export class KmeansLocalService {
     this.data = await this.dataTo2DArrayService.dataTo2DArray(file)
     this.data = this.data.map(row => { return selectedIndices.map(index => row[index]) })
     this.data = this.data.filter(row => row.some(value => value !== undefined && value !== ''))
-
-    // let dataAsNumbers = this.data.slice(1)
-    //  .map(row => row.map(value => parseFloat(value)))
-    //  .filter(row => row.length === this.data[1].length)
-    // dataAsNumbers = this.cleanClusteringData(dataAsNumbers)
-    let dataAsNumbers = this.oneHotEncode(this.data) // .filter(row => row.length === this.data[1].length)
-    console.log(dataAsNumbers)
+    let dataAsNumbers = this.oneHotEncode(this.data)
+    dataAsNumbers = this.removeNaN(dataAsNumbers)
     if (dataAsNumbers[0].length > 2) {
       dataAsNumbers = this.normalizeData(dataAsNumbers)
       dataAsNumbers = this.applyPCA(dataAsNumbers)

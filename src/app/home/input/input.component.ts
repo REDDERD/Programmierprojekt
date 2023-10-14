@@ -123,7 +123,7 @@ export class InputComponent {
   twoColumnsSelectedValidator (): ValidatorFn {
     return (control: AbstractControl): Record<string, any> | null => {
       const selected = control.value
-      if (selected !== null && selected !== undefined && selected.length === 2) {
+      if (selected !== null && selected !== undefined && selected.length >= 2) {
         return null // Kein Fehler
       } else {
         return { twoColumnsRequired: true } // Fehler
