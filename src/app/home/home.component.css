@@ -33,7 +33,6 @@
     flex-direction: column
   }
   .sidenav-item-left {
-    transform: translateX(50px);
     margin-bottom: 30px;
   }
   .drawer-header {
