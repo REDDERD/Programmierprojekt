@@ -16,7 +16,9 @@ export class ChartComponent implements AfterViewInit, OnChanges {
   @Input() kmeansResult: ResponseInterface | undefined
 
   ngAfterViewInit (): void {
-    this.renderChart()
+    setTimeout(() => {
+      this.renderChart()
+    })
   }
 
   ngOnChanges (changes: SimpleChanges): void {
