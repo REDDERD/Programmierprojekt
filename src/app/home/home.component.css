@@ -66,24 +66,40 @@ mat-drawer {
   bottom:0;
 }
 
-.loading-spinner {
-  position: absolute;
-  left: 45%;
-  top: 25%;
-  z-index: 10;
-}
-
 .grey-background {
   background-color: rgba(106, 106, 106, 0.6);
   position: absolute;
   width: 100%;
-  height: 120vh;
+  height: 100%;
+}
+
+.background-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 9;
 }
 
 .cancel-button {
   transform: translateY(50px) translateX(-7px) scale(0.5);
   z-index: 12;
+}
+
+.centered-loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
 }
 
 /*Loading Indicator*/
