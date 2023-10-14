@@ -1,9 +1,9 @@
 <div style="height: 100%">
   <mat-tab-group class="container">
-    <mat-tab label="Graph" style="">
-
+    <mat-tab label="Diagramm">
+      <ng-template matTabContent>
         <app-chart [kmeansResult]="kmeansResult"></app-chart>
-
+      </ng-template>
     </mat-tab>
     <mat-tab label="Tabelle">
       <app-table [kmeansResult]="kmeansResult"></app-table>

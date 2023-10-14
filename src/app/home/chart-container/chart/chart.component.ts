@@ -14,24 +14,37 @@ export class ChartComponent implements AfterViewInit, OnChanges {
   chartData: ResponseInterface = MockDaten
   datasets: ChartDatasetInterface[] = []
   @Input() kmeansResult: ResponseInterface | undefined
+  @Input() selectedTabIndex: number = 0
 
+  // Renders Chart on first render with empty data
   ngAfterViewInit (): void {
     setTimeout(() => {
       this.renderChart()
     })
   }
 
+  // Rerenders Chart if new Data is assigned to this.kmeansResult
   ngOnChanges (changes: SimpleChanges): void {
-    if (changes['kmeansResult'].currentValue !== undefined) {
-      if (this.kmeansResult != null) {
-        this.datasets = []
-        this.chartData = this.kmeansResult
+    for (const propName in changes) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'kmeansResult': {
+            if (this.kmeansResult != null) {
+              this.datasets = []
+              this.chartData = this.kmeansResult
+              if (this.chart != null) {
+                this.chart.destroy()
+                this.renderChart()
+              }
+            }
+          }
+        }
       }
-      this.chart.destroy()
-      this.renderChart()
     }
   }
 
+  // Converts data from backend and local calculation to data format for chart.js datasets
   generateDatasets (): void {
     const centroids: Points[] = []
     const clusterArray: ChartDatasetInterface[] = []
@@ -57,6 +70,7 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     })
   }
 
+  // Generates a chart.js graph
   renderChart (): void {
     this.generateDatasets()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
