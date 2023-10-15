@@ -1,9 +1,14 @@
 <!-- Main Site -->
-<mat-spinner class="loading-spinner" *ngIf="isLoading"></mat-spinner>
-<div class="grey-background" *ngIf="isLoading"></div>
+<!--<mat-spinner class="loading-spinner" *ngIf="isLoading"></mat-spinner>-->
+<div class="centered-loading-indicator" *ngIf="isLoading">
+  <div class="lds-ellipsis"><button mat-flat-button class="cancel-button" color="accent" *ngIf="!localCalculation" (click)="handleCancelCalculation()">Cancel</button><div></div><div></div><div></div><div></div></div>
+</div>
+<div class="background-wrapper" *ngIf="isLoading">
+  <div class="grey-background"></div>
+</div>
 <div class="sidenav-content">
   <div class="sidenav-item-left">
-    <app-input (kmeansResult)="handleAPIResponse($event)" (isLoading)="handleLoading($event)"></app-input>
+    <app-input (kmeansResult)="handleAPIResponse($event)" (isLoading)="handleLoading($event)" (localCalculation)="localCalculation = $event" [triggerCancelCalculation]="cancelCalculation"></app-input>
   </div>
   <div class="sidenav-item-right">
     <app-chart-container [kmeansResult]="kmeansResult"></app-chart-container>

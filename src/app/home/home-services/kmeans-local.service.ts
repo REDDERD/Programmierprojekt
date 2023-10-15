@@ -23,10 +23,9 @@ export class KmeansLocalService {
 
   private elbowMethod (data: number[][], maxClusters: number, distanceMetric: string): number {
     const ssd: number[] = [] // Sum of Squared Distances for different cluster numbers
-
     const distanceFunction = distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
 
-    for (let i = 1; i <= maxClusters; i++) {
+    for (let i = 1; i <= maxClusters && i < data.length; i++) {
       const result = KMeans(data, i, { distanceFunction })
       let currentSSD = 0
       for (let j = 0; j < data.length; j++) {
@@ -73,7 +72,7 @@ export class KmeansLocalService {
 
   private applyPCA (data: number[][]): number[][] {
     const pca = new PCA(data)
-    return pca.predict(data).to2DArray()
+    return pca.predict(data, { nComponents: 2 }).to2DArray()
   }
 
   private oneHotEncode (data: string[][]): number[][] {
@@ -155,7 +154,6 @@ export class KmeansLocalService {
         }))
       }
     })
-
     return {
       user_id: 0,
       request_id: 0,

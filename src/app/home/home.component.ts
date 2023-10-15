@@ -10,8 +10,17 @@ import { ResponseInterface } from '../interfaces/response-interface'
 export class HomeComponent {
   kmeansResult: ResponseInterface | undefined
   isLoading: boolean = false
+  cancelCalculation: boolean = false
+  localCalculation: boolean = false
 
   constructor (private router: Router) {}
+
+  handleCancelCalculation (): void {
+    this.cancelCalculation = true
+    setTimeout(() => {
+      this.cancelCalculation = false
+    })
+  }
 
   public handleAPIResponse (response: ResponseInterface): void {
     this.kmeansResult = response
