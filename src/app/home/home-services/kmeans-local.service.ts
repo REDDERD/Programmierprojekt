@@ -126,8 +126,6 @@ export class KmeansLocalService {
     const result = KMeans(dataAsNumbers, k, {
       distanceFunction: distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
     })
-    console.log(result)
-    console.log(this.convertToJSONFormat(result, dataAsNumbers, file.name, distanceMetric))
     return this.convertToJSONFormat(result, dataAsNumbers, file.name, distanceMetric)
   }
 
