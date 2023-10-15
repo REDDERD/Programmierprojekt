@@ -115,13 +115,11 @@ export class KmeansLocalService {
     let dataAsNumbers = this.oneHotEncode(this.data)
     dataAsNumbers = this.removeNaN(dataAsNumbers)
     let nDimensional = false
-    console.log(dataAsNumbers)
     if (dataAsNumbers[0].length > 2) {
       nDimensional = true
       dataAsNumbers = this.normalizeData(dataAsNumbers)
       dataAsNumbers = this.applyPCA(dataAsNumbers)
     }
-    console.log(dataAsNumbers)
     if (useOptK) {
       k = this.elbowMethod(dataAsNumbers, 100, distanceMetric)
     }
