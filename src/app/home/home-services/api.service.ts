@@ -12,20 +12,29 @@ export class ApiService {
     column2?: number,
     kCluster?: number,
     distanceMetric?: string,
-    clusterDetermination?: string
+    clusterDetermination?: string,
+    nDimensional?: boolean
   ): Observable<any> {
     let Params: HttpParams = new HttpParams()
     let url = 'https://beta.axellotl.de/advanced/perform-advanced-2d-kmeans/'
-
-    if (kCluster !== 0) {
-      url = 'https://beta.axellotl.de/basic/perform-2d-kmeans/'
+    if (nDimensional === true) {
+      if (kCluster !== 0) {
+        url = 'https://beta.axellotl.de/basic/perform-nd-kmeans/'
+      } else {
+        url = 'https://beta.axellotl.de/advanced/perform-advanced-nd-kmeans/'
+      }
+    } else {
+      if (kCluster !== 0) {
+        url = 'https://beta.axellotl.de/basic/perform-2d-kmeans/'
+      }
     }
-
-    if (column1 != null) {
-      Params = Params.set('column1', column1)
-    }
-    if (column2 != null) {
-      Params = Params.set('column2', column2)
+    if (nDimensional === false) {
+      if (column1 != null) {
+        Params = Params.set('column1', column1)
+      }
+      if (column2 != null) {
+        Params = Params.set('column2', column2)
+      }
     }
     if ((kCluster != null) && kCluster > 0) {
       Params = Params.set('k_clusters', kCluster)
