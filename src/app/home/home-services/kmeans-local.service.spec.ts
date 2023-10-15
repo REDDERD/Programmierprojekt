@@ -15,7 +15,7 @@ describe('KmeansLocalService', () => {
   })
 
   it('should return the specified number of clusters for 2D numerical data', (done) => {
-    const file = convertToBlobFile(numerical2D)
+    const file = createMockFile(numerical2D)
     const k = 2
     const indices = [0, 1]
     service.performKMeans(file, k, false, 'EUCLIDEAN', indices).then(result => {
@@ -29,7 +29,7 @@ describe('KmeansLocalService', () => {
   })
 
   it('should return 2 clusters using Elbow-Method using 2D numerical data', (done) => {
-    const file = convertToBlobFile(numerical2D)
+    const file = createMockFile(numerical2D)
     const k = 0
     const indices = [0, 1]
     service.performKMeans(file, k, true, 'EUCLIDEAN', indices).then(result => {
@@ -43,7 +43,7 @@ describe('KmeansLocalService', () => {
   })
 
   it('should return the specified number of clusters using 2D categorical data and manhattan distance', (done) => {
-    const file = convertToBlobFile(categorical2D)
+    const file = createMockFile(categorical2D)
     const k = 3
     const indices = [0, 1]
     service.performKMeans(file, k, false, 'MANHATTAN', indices).then(result => {
@@ -57,7 +57,7 @@ describe('KmeansLocalService', () => {
   })
 
   it('should return the specified number of clusters using 3D categorical data and euclidian distance', (done) => {
-    const file = convertToBlobFile(numerical3D)
+    const file = createMockFile(numerical3D)
     const k = 3
     const indices = [0, 1, 2]
     service.performKMeans(file, k, false, 'EUCLIDEAN', indices).then(result => {
@@ -71,12 +71,8 @@ describe('KmeansLocalService', () => {
   })
 })
 
-function convertToCSV (data: Array<Array<string | number>>): string {
-  return data.map(row => row.join(',')).join('\n')
-}
-
-function convertToBlobFile (data: Array<Array<string | number>>): File {
-  const csvString = convertToCSV(data)
+function createMockFile (data: Array<Array<string | number>>): File {
+  const csvString = data.map(row => row.join(',')).join('\n')
   const blob = new Blob([csvString], { type: 'text/csv' })
   return new File([blob], 'data.csv', { type: 'text/csv' })
 }
