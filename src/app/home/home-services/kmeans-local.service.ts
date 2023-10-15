@@ -115,7 +115,9 @@ export class KmeansLocalService {
     this.data = this.data.filter(row => row.some(value => value !== undefined && value !== ''))
     let dataAsNumbers = this.oneHotEncode(this.data)
     dataAsNumbers = this.removeNaN(dataAsNumbers)
+    let nDimensional = false
     if (dataAsNumbers[0].length > 2) {
+      nDimensional = true
       dataAsNumbers = this.normalizeData(dataAsNumbers)
       dataAsNumbers = this.applyPCA(dataAsNumbers)
     }
@@ -126,17 +128,19 @@ export class KmeansLocalService {
     const result = KMeans(dataAsNumbers, k, {
       distanceFunction: distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
     })
-    return this.convertToJSONFormat(result, dataAsNumbers, file.name, distanceMetric)
+    return this.convertToJSONFormat(result, dataAsNumbers, file.name, distanceMetric, nDimensional)
   }
 
-  private convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string): ResponseInterface {
+  private convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string, nDimensional: boolean): ResponseInterface {
     if (this.data.length === 0 || this.data[0].length < 2) {
       console.error('Invalid CSV data format')
     }
-
-    const xLabel = this.data[0][0]
-    const yLabel = this.data[0][1]
-
+    let xLabel = this.data[0][0]
+    let yLabel = this.data[0][1]
+    if (nDimensional) {
+      xLabel = 'PCA1'
+      yLabel = 'PCA2'
+    }
     const clusters = result.centroids.map((centroid: number[], index: number) => {
       const points = data.filter((_, dataIndex) => result.clusters[dataIndex] === index)
       return {
