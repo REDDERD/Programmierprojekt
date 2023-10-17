@@ -14,60 +14,38 @@ describe('KmeansLocalService', () => {
     expect(service).toBeTruthy()
   })
 
-  it('should return the specified number of clusters for 2D numerical data', (done) => {
+  it('should return the specified number of clusters and euclidian distance for 2D numerical data', async () => {
     const file = createMockFile(numerical2D)
     const k = 2
     const indices = [0, 1]
-    service.performKMeans(file, k, false, 'EUCLIDEAN', indices).then(result => {
-      expect(result.cluster.length).toEqual(k)
-      done()
-    })
-      .catch(error => {
-        fail(`Test failed due to error: ${error}`)
-        done()
-      })
+    const result = await service.performKMeans(file, k, false, 'EUCLIDEAN', indices)
+    expect(result.cluster.length).toEqual(k)
+    expect(result.used_distance_metric).toEqual('EUCLIDEAN')
   })
 
-  it('should return 2 clusters using Elbow-Method using 2D numerical data', (done) => {
+  it('should return 2 clusters using Elbow-Method using 2D numerical data', async () => {
     const file = createMockFile(numerical2D)
     const k = 0
     const indices = [0, 1]
-    service.performKMeans(file, k, true, 'EUCLIDEAN', indices).then(result => {
-      expect(result.cluster.length).toEqual(2)
-      done()
-    })
-      .catch(error => {
-        fail(`Test failed due to error: ${error}`)
-        done()
-      })
+    const result = await service.performKMeans(file, k, true, 'EUCLIDEAN', indices)
+    expect(result.cluster.length).toEqual(2)
   })
 
-  it('should return the specified number of clusters using 2D categorical data and manhattan distance', (done) => {
+  it('should return the specified number of clusters and manhattan distance using 2D categorical data', async () => {
     const file = createMockFile(categorical2D)
     const k = 3
     const indices = [0, 1]
-    service.performKMeans(file, k, false, 'MANHATTAN', indices).then(result => {
-      expect(result.cluster.length).toEqual(3)
-      done()
-    })
-      .catch(error => {
-        fail(`Test failed due to error: ${error}`)
-        done()
-      })
+    const result = await service.performKMeans(file, k, false, 'MANHATTAN', indices)
+    expect(result.cluster.length).toEqual(3)
+    expect(result.used_distance_metric).toEqual('MANHATTAN')
   })
 
-  it('should return the specified number of clusters using 3D categorical data and euclidian distance', (done) => {
+  it('should return the specified number of clusters using 3D numerical data', async () => {
     const file = createMockFile(numerical3D)
     const k = 3
     const indices = [0, 1, 2]
-    service.performKMeans(file, k, false, 'EUCLIDEAN', indices).then(result => {
-      expect(result.cluster.length).toEqual(3)
-      done()
-    })
-      .catch(error => {
-        fail(`Test failed due to error: ${error}`)
-        done()
-      })
+    const result = await service.performKMeans(file, k, false, 'EUCLIDEAN', indices)
+    expect(result.cluster.length).toEqual(3)
   })
 })
 

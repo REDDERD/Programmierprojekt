@@ -144,7 +144,8 @@ export class InputComponent implements OnChanges {
           this.clusterInputFormGroup.get('selectedColumns')?.setValue([this.columnNames[0], this.columnNames[1]])
         }
       }).catch(error => {
-        this.snackbar.open('Daten fehlerhaft.', 'Okay', { duration: 3000 })
+        this.snackbar.open(error.message, 'Okay', { duration: 3000 })
+        this.file = undefined
         console.error(error)
       })
     } else {

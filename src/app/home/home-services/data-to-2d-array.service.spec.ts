@@ -14,33 +14,69 @@ describe('DataTo2DArrayService', () => {
     expect(service).toBeTruthy()
   })
 
-  it('should correctly process a CSV file', (done) => {
-    const mockFile = createMockCSVFile(numerical3D)
-    service.dataTo2DArray(mockFile).then(result => {
-      const expectedData = convertToExpectedFormat(numerical3D)
-      expect(result).toEqual(expectedData)
-      done()
-    }).catch(error => {
-      fail(`Expected to process CSV, but got error: ${error}`)
-      done()
-    })
+  it('should correctly process CSV data with various delimiters', async () => {
+    const delimiters = [',', ';', '\t', '|']
+
+    for (const delimiter of delimiters) {
+      const mockFile = createMockCSVFile(numerical3D, delimiter)
+      const result = await service.dataTo2DArray(mockFile)
+      expect(result).toEqual(convertToExpectedFormat(numerical3D))
+    }
   })
 
-  it('should correctly process an Excel file', (done) => {
-    const mockFile = createMockExcelFile(numerical3D)
-    service.dataTo2DArray(mockFile).then(result => {
-      const expectedData = convertToExpectedFormat(numerical3D)
-      expect(result).toEqual(expectedData)
-      done()
-    }).catch(error => {
-      fail(`Expected to process Excel, but got error: ${error}`)
-      done()
-    })
+  it('should throw an error for empty CSV file', async () => {
+    const file = createMockCSVFile([['']], ',')
+    try {
+      await service.dataTo2DArray(file)
+      fail('Service should throw an error for empty CSV file')
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).toBe('File is empty')
+      } else {
+        fail('Caught exception is not an instance of Error')
+      }
+    }
+  })
+
+  it('should throw an error for not supported delimiter', async () => {
+    const file = createMockCSVFile(numerical3D, '-')
+    try {
+      await service.dataTo2DArray(file)
+      fail('Service should throw an error for wrong delimiter')
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).toBe('Unable to detect a suitable delimiter for the CSV data.')
+      } else {
+        fail('Caught exception is not an instance of Error')
+      }
+    }
+  })
+
+  it('should correctly process Excel data with various delimiters', async () => {
+    const file = createMockExcelFile(numerical3D)
+    const result = await service.dataTo2DArray(file)
+    expect(result).toEqual(convertToExpectedFormat(numerical3D))
+  })
+
+  it('should throw an error for empty Excel file', async () => {
+    // Erstellen einer leeren Excel-Datei
+    const file = createMockExcelFile([['']])
+
+    try {
+      await service.dataTo2DArray(file)
+      fail('Service should throw an error for empty Excel file')
+    } catch (error) {
+      if (error instanceof Error) {
+        expect(error.message).toBe('File is empty')
+      } else {
+        fail('Caught exception is not an instance of Error')
+      }
+    }
   })
 })
 
-function createMockCSVFile (data: Array<Array<string | number>>): File {
-  const csvString = data.map(row => row.join(',')).join('\n')
+function createMockCSVFile (data: Array<Array<string | number>>, delimiter: string): File {
+  const csvString = data.map(row => row.join(delimiter)).join('\n')
   const blob = new Blob([csvString], { type: 'text/csv' })
   return new File([blob], 'data.csv', { type: 'text/csv' })
 }

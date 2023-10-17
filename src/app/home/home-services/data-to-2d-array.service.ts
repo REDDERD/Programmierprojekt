@@ -8,14 +8,18 @@ import * as xlsx from 'node-xlsx'
 export class DataTo2dArrayService {
   async dataTo2DArray (file: File): Promise<string[][]> {
     const fileExtension = file.name.split('.').pop()?.toLowerCase()
-
+    let data: string[][] = []
     if (fileExtension === 'csv') {
-      return await this.csvTo2DArray(file)
+      data = await this.csvTo2DArray(file)
     } else if (fileExtension === 'xlsx') {
-      return await this.excelTo2DArray(file)
+      data = await this.excelTo2DArray(file)
     } else {
       throw new Error('Unsupported file format')
     }
+    if (data.length === 0 || (data.length === 1 && data[0].length === 1 && data[0][0] === '')) {
+      throw new Error('File is empty')
+    }
+    return data
   }
 
   private async excelTo2DArray (file: File): Promise<string[][]> {
@@ -48,23 +52,29 @@ export class DataTo2dArrayService {
   private async csvTo2DArray (file: File): Promise<string[][]> {
     return await new Promise<string[][]>((resolve, reject) => {
       const fileReader = new FileReader()
-
       fileReader.onload = () => {
         try {
           const content = fileReader.result as string
           const delimiter = this.detectDelimiter(content)
-          const rows = content.split(/\r\n|\n|\r/)
+          console.log('test')
+          let rows = content.split(/\r\n|\n|\r/)
+          rows = rows.filter(row => row.trim().length > 0)
+          if (rows.length === 0) {
+            resolve([])
+            return
+          }
           const data = rows.map(row => row.split(delimiter))
           resolve(data)
         } catch (error) {
-          reject(new Error('Failed to process the CSV file.'))
+          if (error instanceof Error) {
+            console.log(error.message)
+            reject(new Error(error.message))
+          }
         }
       }
-
       fileReader.onerror = () => {
-        reject(new Error('Failed to read the CSV file.'))
+        reject(new Error('Failed to process the CSV file.'))
       }
-
       fileReader.readAsText(file)
     })
   }
@@ -84,7 +94,7 @@ export class DataTo2dArrayService {
 
       // Count how often the current delimiter appears in each line
       for (const line of lines) {
-        const count = (line.match(new RegExp(delimiter, 'g')) ?? []).length
+        const count = (line.match(new RegExp('\\' + delimiter, 'g')) ?? []).length
         counts.push(count)
         currentDelimiterCount += count
       }
@@ -99,7 +109,13 @@ export class DataTo2dArrayService {
 
     // If no suitable delimiter is found, throw an error
     if (bestDelimiter === '') {
-      console.error('Unable to detect a suitable delimiter for the CSV data.')
+      if (csvData === '') {
+        console.error('File is empty')
+        throw new Error('File is empty')
+      } else {
+        console.error('Unable to detect a suitable delimiter for the CSV data.')
+        throw new Error('Unable to detect a suitable delimiter for the CSV data.')
+      }
     }
 
     return bestDelimiter
