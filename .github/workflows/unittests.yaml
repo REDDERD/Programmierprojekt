@@ -6,7 +6,7 @@ on:
       - '**'  # Wird für jeden Push auf jeden Branch durchgeführt
 
 jobs:
-  lint:
+  unittests:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,4 +22,4 @@ jobs:
         run: npm install
 
       - name: Run Unit Tests
-        run: ng test
+        run: npx ng test
