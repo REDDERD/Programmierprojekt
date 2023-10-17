@@ -13,6 +13,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      - name: Install Chrome to Ubuntu
+        run: sudo apt install chromium-browser
+
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
@@ -20,6 +23,9 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: install ci
+        run: npm ci
 
       - name: Run Unit Tests
         run: npm test
