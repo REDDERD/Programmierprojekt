@@ -27,9 +27,6 @@ jobs:
       - name: install ci
         run: npm ci
 
-      - name: weird command
-        run: sed -i -z "s/ removeAllListeners()\n/ removeAllListeners();process.nextTick(() => process.exit(code || 0));\n/g" node_modules/karma/lib/server.js
-
       - name: Run Unit Tests
         run: npm test
         env:
