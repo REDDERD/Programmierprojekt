@@ -13,25 +13,19 @@ export class KmeansLocalService {
   data: string[][] = []
   clusters: any[] = []
 
-  /**
-   * Calculates the Euclidean distance between two points.
-   */
+  // Calculates the Euclidean distance between two points.
   private euclideanDistance (pointA: number[], pointB: number[]): number {
     return Math.sqrt(pointA.reduce((sum, value, index) => sum + Math.pow(value - pointB[index], 2), 0))
   }
 
-  /**
-   * Calculates the Manhattan distance between two points.
-   */
+  // Calculates the Manhattan distance between two points.
   private manhattanDistance (pointA: number[], pointB: number[]): number {
     return pointA.reduce((sum, value, index) => sum + Math.abs(value - pointB[index]), 0)
   }
 
-  /**
-   * Determines the optimal number of clusters for KMeans clustering using the Elbow Method.
-   * The Elbow Method calculates the Sum of Squared Distances (SSD) for different numbers of clusters
-   * and identifies the "elbow" point where the rate of decrease sharply changes.
-   */
+  // Determines the optimal number of clusters for KMeans clustering using the Elbow Method.
+  // The Elbow Method calculates the Sum of Squared Distances (SSD) for different numbers of clusters
+  // and identifies the "elbow" point where the rate of decrease sharply changes.
   private elbowMethod (data: number[][], maxClusters: number, distanceMetric: string): number {
     const ssd: number[] = [] // Sum of Squared Distances for different cluster numbers.
     const distanceFunction = distanceMetric === 'EUCLIDEAN' ? this.euclideanDistance : this.manhattanDistance
@@ -57,10 +51,8 @@ export class KmeansLocalService {
     return elbowPoint + 2 // +2 because the index is 0-based and we started from k=1
   }
 
-  /**
-   * Removes rows containing NaN values from the given 2D numerical data.
-   * If more than 25% of the rows are removed due to NaN values, an error is thrown.
-   */
+  // Removes rows containing NaN values from the given 2D numerical data.
+  // If more than 25% of the rows are removed due to NaN values, an error is thrown.
   private removeNaN (dataAsNumbers: number[][]): number[][] {
     // Filter out rows containing NaN values.
     const filteredData = dataAsNumbers.filter(row => {
@@ -73,10 +65,8 @@ export class KmeansLocalService {
     return filteredData
   }
 
-  /**
-   * Normalize the given data using z-score normalization.
-   * This method scales the data to have a mean of 0 and a standard deviation of 1.
-   */
+  // Normalize the given data using z-score normalization.
+  // This method scales the data to have a mean of 0 and a standard deviation of 1.
   private normalizeData (data: number[][]): number[][] {
     // Calculate the mean for each column
     const means = data[0].map((_, colIndex) => mean(data.map(row => row[colIndex])))
@@ -90,20 +80,16 @@ export class KmeansLocalService {
     )
   }
 
-  /**
-   * Apply Principal Component Analysis (PCA) to reduce the dimensionality of the given data.
-   * This method projects the data into a 2D space while retaining as much variance as possible.
-   */
+  // Apply Principal Component Analysis (PCA) to reduce the dimensionality of the given data.
+  // This method projects the data into a 2D space while retaining as much variance as possible.
   private applyPCA (data: number[][]): number[][] {
     const pca = new PCA(data)
     return pca.predict(data, { nComponents: 2 }).to2DArray()
   }
 
-  /**
-   * One-hot encodes the categorical columns in the given data.
-   * Numeric columns are left unchanged, while categorical columns are transformed into binary columns
-   * where each unique category value becomes its own column.
-   */
+  // One-hot encodes the categorical columns in the given data.
+  // Numeric columns are left unchanged, while categorical columns are transformed into binary columns
+  // where each unique category value becomes its own column.
   private oneHotEncode (data: string[][]): number[][] {
     const headers = data[0]
     const rows = data.slice(1)
@@ -141,9 +127,7 @@ export class KmeansLocalService {
     })
   }
 
-  /**
-   * Performs KMeans clustering on the provided data file.
-   */
+  // Performs KMeans clustering on the provided data file.
   async performKMeans (file: File, k: number, useOptK: boolean, distanceMetric: string, selectedIndices: number[]): Promise<ResponseInterface> {
     // Convert the file to a 2D array
     this.data = await this.dataTo2DArrayService.dataTo2DArray(file)
@@ -175,9 +159,7 @@ export class KmeansLocalService {
     return this.convertToJSONFormat(result, dataAsNumbers, file.name, distanceMetric, nDimensional)
   }
 
-  /**
-   * Converts the clustering result into a specified JSON format.
-   */
+  // Converts the clustering result into a specified JSON format.
   private convertToJSONFormat (result: any, data: number[][], fileName: string, distanceMetric: string, nDimensional: boolean): ResponseInterface {
     // Check for invalid data format
     if (this.data.length === 0 || this.data[0].length < 2) {

@@ -35,7 +35,7 @@ export class InputComponent implements OnChanges {
     private localKmeans: KmeansLocalService,
     private dataTo2DArrayService: DataTo2dArrayService
   ) {
-    // Höre auf Änderungen im 'k' Feld
+    // Listen to changes in 'k' field to disable/activate cluster determination
     this.clusterInputFormGroup.get('k')?.valueChanges.subscribe(() => {
       this.updateClusterDetermination()
     })
@@ -58,7 +58,11 @@ export class InputComponent implements OnChanges {
     }
   }
 
+  // Handles the submission of the clustering request.
+  // Depending on the user's choice, it either performs the KMeans clustering
+  // locally or sends a request to the backend for processing.
   submit (): void {
+    // Check if the user has chosen local/backend KMeans calculation
     if (this.clusterInputFormGroup.value.offlineKmeans === true) {
       this.localCalculation.emit(true)
       this.isLoading.emit(true)
@@ -89,6 +93,7 @@ export class InputComponent implements OnChanges {
         const distanceMetric: string = this.clusterInputFormGroup.value.distanceMetric
         const clusterDetermination = this.clusterInputFormGroup.value.clusterDetermination
         this.isLoading.emit(true)
+        // Filter out not needed columns (Backend clusters all columns in file if n-dimensional clustering is needed)
         this.filterFileColumns().then(filteredFile => {
           this.activeSubscription = this.apiService.postKmeans(
             filteredFile,
@@ -130,17 +135,19 @@ export class InputComponent implements OnChanges {
     this.onFileChange(event.target.files[0])
   }
 
+  // Handles the change event when a new file is selected.
   private onFileChange (file: File): void {
     const fileExtension = file.name.split('.').pop()?.toLowerCase()
+    // Check if the file is either a CSV or an Excel file
     if (fileExtension === 'csv' || fileExtension === 'xlsx') {
       this.file = file
       this.snackbar.open('Datei ' + file.name + ' wird hochgeladen', 'Okay', { duration: 2000 })
 
       this.dataTo2DArrayService.dataTo2DArray(file).then(data => {
-        // Spaltennamen (Header) extrahieren
+        // Extract column names (header) from the data
         if (data !== null && data !== undefined && data.length > 1) {
           this.columnNames = data[0]
-          // Setzen Sie die ersten beiden Spalten als standardmäßig ausgewählt
+          // Set the first two columns as default selected
           this.clusterInputFormGroup.get('selectedColumns')?.setValue([this.columnNames[0], this.columnNames[1]])
         }
       }).catch(error => {
@@ -153,34 +160,41 @@ export class InputComponent implements OnChanges {
     }
   }
 
+  // Validator function to ensure at least two columns are selected.
   twoColumnsSelectedValidator (): ValidatorFn {
     return (control: AbstractControl): Record<string, any> | null => {
       const selected = control.value
+      // Check if at least two columns are selected
       if (selected !== null && selected !== undefined && selected.length >= 2) {
-        return null // Kein Fehler
+        return null
       } else {
-        return { twoColumnsRequired: true } // Fehler
+        return { twoColumnsRequired: true }
       }
     }
   }
 
+  // Getter for the selected columns' values from the form group.
   get selectedColumnsValue (): string[] {
     return this.clusterInputFormGroup.get('selectedColumns')?.value ?? []
   }
 
+  // Getter for the indices of the selected columns.
   get selectedColumnsIndices (): number[] {
     return this.selectedColumnsValue.map(name => this.columnNames.indexOf(name))
   }
 
+  // Checks if a file has been uploaded.
   isFileUploaded (): boolean {
     return this.file !== null && this.file !== undefined
   }
 
+  // Checks if a 'k' value is provided.
   hasKValue (): boolean {
     const kValue = this.clusterInputFormGroup.get('k')?.value
     return kValue !== '' && kValue !== null && kValue !== undefined
   }
 
+  // Updates the 'clusterDetermination' value in the form group based on the 'k' value and the 'offlineKmeans' setting.
   updateClusterDetermination (): void {
     const kValue = this.clusterInputFormGroup.get('k')?.value
     if (kValue !== null && kValue !== undefined && kValue.toString().trim() !== '') {
@@ -195,6 +209,7 @@ export class InputComponent implements OnChanges {
     }
   }
 
+  // Updates the 'offlineKmeans' value in the form group based on the selected 'clusterDetermination' method.
   updateOfflineKMeans (): void {
     const determination = this.clusterInputFormGroup.get('clusterDetermination')?.value
 
@@ -205,6 +220,9 @@ export class InputComponent implements OnChanges {
     }
   }
 
+  // Filters the columns of the uploaded file based on the selected column indices.
+  // This function reads the content of the uploaded file, filters the columns based on the
+  // selected indices, and then creates a new CSV file with only the selected columns.
   async filterFileColumns (): Promise<File> {
     if (this.file === null || this.file === undefined) {
       throw new Error('File is not set.')

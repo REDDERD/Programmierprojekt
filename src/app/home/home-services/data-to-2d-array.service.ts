@@ -6,9 +6,7 @@ import * as xlsx from 'node-xlsx'
 })
 
 export class DataTo2dArrayService {
-  /**
-   * Converts the provided file into a 2D array of strings.
-   */
+  // Converts the provided file into a 2D array of strings.
   async dataTo2DArray (file: File): Promise<string[][]> {
     // Determine the file extension
     const fileExtension = file.name.split('.').pop()?.toLowerCase()
@@ -22,9 +20,7 @@ export class DataTo2dArrayService {
     }
   }
 
-  /**
-   * Converts the provided Excel file into a 2D array of strings.
-   */
+  // Converts the provided Excel file into a 2D array of strings.
   private async excelTo2DArray (file: File): Promise<string[][]> {
     return await new Promise<string[][]>((resolve, reject) => {
       const fileReader = new FileReader()
@@ -57,9 +53,7 @@ export class DataTo2dArrayService {
     })
   }
 
-  /**
-   * Converts the content of a CSV file into a 2D array.
-   */
+  // Converts the content of a CSV file into a 2D array.
   private async csvTo2DArray (file: File): Promise<string[][]> {
     return await new Promise<string[][]>((resolve, reject) => {
       const fileReader = new FileReader()
@@ -97,12 +91,10 @@ export class DataTo2dArrayService {
     })
   }
 
-  /**
-   * Detects the delimiter used in a CSV string.
-   * The function checks common delimiters (comma, semicolon, tab, and pipe)
-   * and determines the best fit based on the consistency of its occurrence
-   * in the first few lines of the CSV data.
-   */
+  // Detects the delimiter used in a CSV string.
+  // The function checks common delimiters (comma, semicolon, tab, and pipe)
+  // and determines the best fit based on the consistency of its occurrence
+  // in the first few lines of the CSV data.
   private detectDelimiter (csvData: string): string {
     // List of potential delimiters
     const potentialDelimiters = [',', ';', '\t', '|']
