@@ -178,7 +178,7 @@ export class InputComponent implements OnChanges {
 
   hasKValue (): boolean {
     const kValue = this.clusterInputFormGroup.get('k')?.value
-    return kValue !== ''
+    return kValue !== '' && kValue !== null && kValue !== undefined
   }
 
   updateClusterDetermination (): void {
@@ -192,6 +192,16 @@ export class InputComponent implements OnChanges {
       } else {
         this.clusterInputFormGroup.get('clusterDetermination')?.setValue('SILHOUETTE')
       }
+    }
+  }
+
+  updateOfflineKMeans (): void {
+    const determination = this.clusterInputFormGroup.get('clusterDetermination')?.value
+
+    if (determination === 'ELBOW') {
+      this.clusterInputFormGroup.get('offlineKmeans')?.setValue(true)
+    } else if (determination === 'SILHOUETTE') {
+      this.clusterInputFormGroup.get('offlineKmeans')?.setValue(false)
     }
   }
 
