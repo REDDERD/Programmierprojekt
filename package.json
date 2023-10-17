@@ -5,8 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --configuration development",
-    "test": "ng test",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test --browsers=ChromeHeadless",
     "lint": "ng lint"
   },
   "private": true,
