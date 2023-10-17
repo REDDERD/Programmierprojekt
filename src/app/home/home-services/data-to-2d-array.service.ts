@@ -8,18 +8,13 @@ import * as xlsx from 'node-xlsx'
 export class DataTo2dArrayService {
   async dataTo2DArray (file: File): Promise<string[][]> {
     const fileExtension = file.name.split('.').pop()?.toLowerCase()
-    let data: string[][] = []
     if (fileExtension === 'csv') {
-      data = await this.csvTo2DArray(file)
+      return await this.csvTo2DArray(file)
     } else if (fileExtension === 'xlsx') {
-      data = await this.excelTo2DArray(file)
+      return await this.excelTo2DArray(file)
     } else {
       throw new Error('Unsupported file format')
     }
-    if (data.length === 0 || (data.length === 1 && data[0].length === 1 && data[0][0] === '')) {
-      throw new Error('File is empty')
-    }
-    return data
   }
 
   private async excelTo2DArray (file: File): Promise<string[][]> {
@@ -31,16 +26,17 @@ export class DataTo2dArrayService {
           const buffer = event.target?.result as ArrayBuffer
           const data = xlsx.parse(buffer) // Dies gibt ein Array von Arbeitsblättern zurück
 
-          if (data !== null && data !== undefined && data.length > 0 && data[0]?.data !== null && data[0]?.data !== undefined) {
+          if (data.length > 0 && Array.isArray(data[0]?.data) && data[0].data.length > 0 && !(data[0].data.length === 1 && data[0].data[0][0] === '')) {
             resolve(data[0].data as string[][])
           } else {
-            reject(new Error('No data found in the Excel file.'))
+            reject(new Error('File is empty'))
           }
         } catch (error) {
-          reject(new Error('Failed to parse the Excel file.'))
+          if (error instanceof Error) {
+            reject(new Error(error.message))
+          }
         }
       }
-
       fileReader.onerror = () => {
         reject(new Error('Failed to read the file.'))
       }
@@ -56,7 +52,6 @@ export class DataTo2dArrayService {
         try {
           const content = fileReader.result as string
           const delimiter = this.detectDelimiter(content)
-          console.log('test')
           let rows = content.split(/\r\n|\n|\r/)
           rows = rows.filter(row => row.trim().length > 0)
           if (rows.length === 0) {
@@ -67,7 +62,6 @@ export class DataTo2dArrayService {
           resolve(data)
         } catch (error) {
           if (error instanceof Error) {
-            console.log(error.message)
             reject(new Error(error.message))
           }
         }
@@ -109,15 +103,12 @@ export class DataTo2dArrayService {
 
     // If no suitable delimiter is found, throw an error
     if (bestDelimiter === '') {
-      if (csvData === '') {
-        console.error('File is empty')
+      if (csvData.trim() === '') {
         throw new Error('File is empty')
       } else {
-        console.error('Unable to detect a suitable delimiter for the CSV data.')
         throw new Error('Unable to detect a suitable delimiter for the CSV data.')
       }
     }
-
     return bestDelimiter
   }
 }

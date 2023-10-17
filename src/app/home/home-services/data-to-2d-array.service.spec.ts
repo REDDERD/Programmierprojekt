@@ -91,6 +91,7 @@ function createMockExcelFile (data: Array<Array<string | number>>): File {
     }
   }
   const buffer = xlsx.build([worksheet])
+  console.log(xlsx.parse(buffer))
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
   return new File([blob], 'mock.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
 }
