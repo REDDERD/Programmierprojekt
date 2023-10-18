@@ -1,4 +1,4 @@
-name: Linting # Diese GitHub-Action muss erfolgreich durchlaufen, sonst darf keine PR gemergt werden
+name: Unit-Tests # Diese GitHub-Action muss erfolgreich durchlaufen, sonst darf keine PR gemergt werden
 
 on:
   push:
@@ -6,12 +6,15 @@ on:
       - '**'  # Wird für jeden Push auf jeden Branch durchgeführt
 
 jobs:
-  lint:
+  unittests:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - name: Install Chrome to Ubuntu
+        run: sudo apt install chromium-browser
 
       - name: Install Node.js
         uses: actions/setup-node@v2
@@ -21,5 +24,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run ng lint
-        run: npx ng lint
+      - name: install ci
+        run: npm ci
+
+      - name: Run Unit Tests
+        run: npm test
+        env:
+          CI: true
