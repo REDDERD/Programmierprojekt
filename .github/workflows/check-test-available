@@ -1,6 +1,7 @@
 name: Availability Check for test
 
 on:
+  workflow_dispatch
   schedule:
     - cron: '35 4 * * *'
 
