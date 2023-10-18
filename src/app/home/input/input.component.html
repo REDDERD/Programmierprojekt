@@ -64,8 +64,8 @@
             </div>
             <div>
               <mat-button-toggle-group name="kMethod" formControlName="clusterDetermination">
-                <mat-button-toggle value="ELBOW" [disabled]="hasKValue() || !clusterInputFormGroup.value.offlineKmeans">Ellenbogen</mat-button-toggle>
-                <mat-button-toggle value="SILHOUETTE" [disabled]="hasKValue() || !!clusterInputFormGroup.value.offlineKmeans">Silhouette</mat-button-toggle>
+                <mat-button-toggle value="ELBOW" [disabled]="hasKValue()" (change)="updateOfflineKMeans()">Ellenbogen</mat-button-toggle>
+                <mat-button-toggle value="SILHOUETTE" [disabled]="hasKValue()" (change)="updateOfflineKMeans()">Silhouette</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
             <div class="grid-over-two-columns">
