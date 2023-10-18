@@ -6,7 +6,7 @@ on:
 
 
 jobs:
-  health-check:
+  Availability-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,12 +21,12 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Health Check
+      - name: Run Availability Check
         run: |
           if curl -IsSf ${{ secrets.URL_PROD }} -o /dev/null; then
-            echo "Website Health Check Passed"
+            echo "Website Availability Check Passed"
           else
-            echo "Website Health Check Failed"
+            echo "Website Availability Check Failed"
             exit 1
           fi
           
@@ -35,4 +35,4 @@ jobs:
 
       - name: Notify on Failure
         if: failure()
-        run: echo "Health Check failed for Prod"
+        run: echo "Availability Check failed for Prod"
