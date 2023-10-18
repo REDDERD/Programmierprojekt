@@ -1,6 +1,7 @@
 name: Availability Check for prod
 
 on:
+  workflow_dispatch
   schedule:
     - cron: '35 4 * * *'
 
