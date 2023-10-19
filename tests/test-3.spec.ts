@@ -1,0 +1,30 @@
+import { test, expect } from '@playwright/test';
+
+test('sucessful upload with changed settings', async ({ page }) => {
+  await page.goto('http://localhost:4200/');
+  await page.reload();
+  await page.getByRole('button', { name: 'Lade eine Datei hoch' }).click();
+  const inputUploadHandle = await page.$('input[type=file]');
+  await inputUploadHandle.setInputFiles('tests/moon.csv');
+  expect(page.getByText('[object Object]')).toBeVisible();
+  await page.getByRole('button', { name: 'Experteneinstellungen' }).click();
+  expect(page.getByRole('button', { name: 'Experteneinstellungen' })).toBeVisible();
+  expect(page.getByText('insert_drive_filemoon.csv')).toBeVisible();
+  await page.getByLabel('execute locally').click();
+  await page.getByRole('button', { name: 'Manhattan' }).click();
+  await page.getByLabel('k definieren (optional)').click();
+  await page.getByLabel('k definieren (optional)').fill('5');
+  await page.getByLabel('X, Y').locator('path').click();
+  await page.getByRole('option', { name: 'X' }).locator('mat-pseudo-checkbox').click();
+  await page.locator('.cdk-overlay-backdrop').click();
+  expect(page.getByText('Bitte mindestens 2 Spalten auswählen.')).toBeVisible();
+  await page.getByLabel('Spalten').locator('svg').click();
+  await page.getByRole('option', { name: 'X' }).locator('mat-pseudo-checkbox').click();
+  await page.locator('.cdk-overlay-backdrop').click();
+  await page.getByRole('button', { name: 'K-Means durchführen' }).click();
+  expect(page.getByText('[object Object]')).toBeVisible();
+  await page.getByText('Tabelle').click();
+  expect(page.getByRole('cell', { name: 'Centroid 5' })).toBeVisible();
+  await page.getByRole('cell', { name: 'Centroid 5' }).click();
+  await page.getByRole('cell', { name: 'Centroid 5' }).getByRole('button').click();
+});
