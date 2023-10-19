@@ -23,6 +23,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { TableComponent } from './home/chart-container/table/table.component'
 import { MatTabsModule } from '@angular/material/tabs'
 import { MatTableModule } from '@angular/material/table'
+import { MatTooltipModule } from '@angular/material/tooltip'
 
 const routes: Routes = [{ path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }]
@@ -53,7 +54,8 @@ const routes: Routes = [{ path: 'home', component: HomeComponent },
     MatExpansionModule,
     MatSlideToggleModule,
     MatTabsModule,
-    MatTableModule
+    MatTableModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
