@@ -2,16 +2,21 @@
   <form class="form-container" [formGroup]="clusterInputFormGroup" (ngSubmit)="submit()">
     <h1 class="grid-over-two-columns">K-Means durchführen</h1>
 
-    <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
+    <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)" matTooltip="">
       <input type="file" style="display: none" (change)="onChange($event)" #fileUpload >
 
       <h3>Ziehe eine .csv / .xlsx Datei per Drag & Drop hierher</h3>
       <h3>oder</h3>
 
       <div class="button-row">
-        <button mat-raised-button (click)="fileUpload.click()" color="accent" type="button">
+        <div></div>
+        <button mat-raised-button (click)="fileUpload.click()" color="accent" type="button" matTooltip="Bei CSV-Dateien wird das Trennzeichen automatisch erkannt.">
           Lade eine Datei hoch <mat-icon>upload_file</mat-icon>
         </button>
+        <div>
+          <mat-icon style="color: #616161; margin-left: 8px; margin-top: 5px;" fontIcon="info"
+                       matTooltip="Jede Spalte der Datei entspricht einer Dimension. Es werden beliebig viele Dimensionen unterstützt."></mat-icon></div>
+
       </div>
 
     </div>
@@ -31,16 +36,19 @@
 
           <div class="settings-grid">
             <div>Spaltenauswahl</div>
+
             <mat-form-field class="fixed-width-field"
-                            [class.has-error]="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')">
+                            [class.has-error]="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')" >
               <mat-label>Spalten</mat-label>
-              <mat-select multiple formControlName="selectedColumns">
+              <mat-select multiple formControlName="selectedColumns" matTooltip="Bei mehr als zwei Dimensionen wird zur Dimensionsreduzierung bei lokaler Ausführung PCA, bei Server-Ausführung t-SNE verwendet"  matTooltipPosition="above">
                 <mat-option *ngFor="let column of columnNames" [value]="column">{{column}} </mat-option>
               </mat-select>
-              <mat-error *ngIf="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired')">
+              <mat-error *ngIf="clusterInputFormGroup.get('selectedColumns')?.hasError('twoColumnsRequired') ">
                 Bitte mindestens 2 Spalten auswählen.
               </mat-error>
             </mat-form-field>
+
+
 
             <div>Anzahl der Cluster (optional)</div>
             <div>
@@ -69,7 +77,7 @@
               </mat-button-toggle-group>
             </div>
             <div class="grid-over-two-columns">
-              <mat-slide-toggle name="localSelector" aria-label="execute locally" formControlName="offlineKmeans" (change)="updateClusterDetermination()">Lokal im Browser ausführen</mat-slide-toggle>            </div>
+              <mat-slide-toggle name="localSelector" aria-label="execute locally" formControlName="offlineKmeans" (change)="updateClusterDetermination()" matTooltip="Je nach Datenmenge kann diese Option dein Gerät an die Grenzen bringen.">Lokal im Browser ausführen</mat-slide-toggle></div>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
