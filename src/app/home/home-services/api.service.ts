@@ -16,16 +16,16 @@ export class ApiService {
     nDimensional?: boolean
   ): Observable<any> {
     let Params: HttpParams = new HttpParams()
-    let url = 'https://beta.axellotl.de/advanced/perform-advanced-2d-kmeans/'
+    let url = 'https://app.axellotl.de/advanced/perform-advanced-2d-kmeans/'
     if (nDimensional === true) {
       if (kCluster !== 0) {
-        url = 'https://beta.axellotl.de/basic/perform-nd-kmeans/'
+        url = 'https://app.axellotl.de/basic/perform-nd-kmeans/'
       } else {
-        url = 'https://beta.axellotl.de/advanced/perform-advanced-nd-kmeans/'
+        url = 'https://app.axellotl.de/advanced/perform-advanced-nd-kmeans/'
       }
     } else {
       if (kCluster !== 0) {
-        url = 'https://beta.axellotl.de/basic/perform-2d-kmeans/'
+        url = 'https://app.axellotl.de/basic/perform-2d-kmeans/'
       }
     }
     if (nDimensional === false) {
