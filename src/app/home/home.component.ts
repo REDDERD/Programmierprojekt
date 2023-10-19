@@ -29,8 +29,4 @@ export class HomeComponent {
   public handleLoading (status: boolean): void {
     this.isLoading = status
   }
-
-  public routeToLogin (): void {
-    void this.router.navigate(['/login'])
-  }
 }
