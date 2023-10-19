@@ -30,7 +30,7 @@ describe('ApiService', () => {
       expect(response).toEqual(mockResponse)
     })
 
-    const req = httpMock.expectOne(request => request.url.startsWith('https://beta.axellotl.de/basic/perform-2d-kmeans/'))
+    const req = httpMock.expectOne(request => request.url.startsWith('https://app.axellotl.de/basic/perform-2d-kmeans/'))
     expect(req.request.method).toBe('POST')
     expect(req.request.params.get('column1')).toBe('1')
     expect(req.request.params.get('column2')).toBe('2')
@@ -49,7 +49,7 @@ describe('ApiService', () => {
       expect(response).toEqual(mockResponse)
     })
 
-    const req = httpMock.expectOne(request => request.url.startsWith('https://beta.axellotl.de/basic/perform-nd-kmeans/'))
+    const req = httpMock.expectOne(request => request.url.startsWith('https://app.axellotl.de/basic/perform-nd-kmeans/'))
     expect(req.request.method).toBe('POST')
 
     req.flush(mockResponse)
@@ -63,7 +63,7 @@ describe('ApiService', () => {
       expect(response).toEqual(mockResponse)
     })
 
-    const req = httpMock.expectOne(request => request.url.startsWith('https://beta.axellotl.de/basic/perform-nd-kmeans/'))
+    const req = httpMock.expectOne(request => request.url.startsWith('https://app.axellotl.de/basic/perform-nd-kmeans/'))
     expect(req.request.method).toBe('POST')
 
     req.flush(mockResponse)
