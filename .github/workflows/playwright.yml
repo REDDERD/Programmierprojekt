@@ -1,9 +1,14 @@
 name: Playwright Tests
 on:
+  schedule:
+    - cron: '35 4 * * *'
   push:
-    branches: '**'
+    branches:
+      - main
+      - test-deployment
+
 jobs:
-  test:
+  E2E_Tests:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -13,6 +18,16 @@ jobs:
         node-version: 18
     - name: Install dependencies
       run: npm ci
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+    - name: Start local server in the background
+      run: ng serve &
+    - name: Wait for the server to start
+      run: |
+        until nc -z -w5 localhost 4200; do
+          echo 'Waiting for the local server to start...'
+          sleep 5
+        done     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
