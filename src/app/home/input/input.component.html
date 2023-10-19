@@ -2,7 +2,7 @@
   <form class="form-container" [formGroup]="clusterInputFormGroup" (ngSubmit)="submit()">
     <h1 class="grid-over-two-columns">K-Means durchführen</h1>
 
-    <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)" matTooltip="">
+    <div class="grid-over-two-columns dropzone" (dragover)="onDragOver($event)" (drop)="onDropSuccess($event)">
       <input type="file" style="display: none" (change)="onChange($event)" #fileUpload >
 
       <h3>Ziehe eine .csv / .xlsx Datei per Drag & Drop hierher</h3>
