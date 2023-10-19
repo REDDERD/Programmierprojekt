@@ -1,0 +1,39 @@
+name: Availability Check for prod
+
+on:
+  workflow_dispatch
+  schedule:
+    - cron: '35 4 * * *'
+
+
+jobs:
+  Availability-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Availability Check
+        run: |
+          if curl -IsSf ${{ secrets.URL_PROD }} -o /dev/null; then
+            echo "Website Availability Check Passed"
+          else
+            echo "Website Availability Check Failed"
+            exit 1
+          fi
+          
+        env:
+          website_url: ${{ secrets.URL_PROD }}
+
+      - name: Notify on Failure
+        if: failure()
+        run: echo "Availability Check failed for Prod"
