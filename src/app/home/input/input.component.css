@@ -33,6 +33,9 @@
 
   .button-row{
     horiz-align: center;
+    display: grid;
+    text-align: left;
+    grid-template-columns: 20% 60% 20%;
   }
 }
 .dropzone:hover{
