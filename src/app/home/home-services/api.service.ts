@@ -48,7 +48,6 @@ export class ApiService {
 
     const formData = new FormData()
     formData.append('file', new Blob([csv], { type: 'text/csv' }), csv.name)
-    console.log(url)
     return this.http.post(
       url,
       formData,
